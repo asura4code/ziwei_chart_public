@@ -72,6 +72,7 @@
       display: flex;
       flex-direction: column;
       gap: 4px;
+	  min-width: 0; /* 👉 新增這行：防止 Grid 欄位被內部元件撐爆超出容器 */
     }
 
     .form-group label {
@@ -89,7 +90,15 @@
       font-size: 0.92rem;
       outline: none;
       width: 100%;
+	  min-width: 0;       /* 👉 新增：避免原生寬度溢出 */
     }
+	
+	/* 新增以下專門針對日期輸入框的樣式微調 */
+	input[type="date"] {
+	  padding: 8px 6px;  /* 縮小左右內距 */
+	  font-size: 0.86rem; /* 稍微縮小字體，確保 10 個中英文字元能完全容納 */
+	  -webkit-appearance: none; /* 移除 iOS 預設的額外陰影與凸出外框 */
+	}
 
     input:focus, select:focus {
       border-color: var(--accent-brown);
