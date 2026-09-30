@@ -82,25 +82,92 @@
       color: var(--text-muted);
       font-weight: 500;
     }
-
-    input, select, button {
-      background: #fcfbfa;
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 8px 10px;
-      border-radius: 6px;
-      font-size: 0.92rem;
-      outline: none;
-      width: 100%;
-	  min-width: 0;       /* 👉 新增：避免原生寬度溢出 */
-    }
 	
-	/* 新增以下專門針對日期輸入框的樣式微調 */
-	input[type="date"] {
-	  padding: 8px 6px;  /* 縮小左右內距 */
-	  font-size: 0.86rem; /* 稍微縮小字體，確保 10 個中英文字元能完全容納 */
-	  -webkit-appearance: none; /* 移除 iOS 預設的額外陰影與凸出外框 */
+	/* 1. 【一鍵排盤 / 其他按鈕】完全保持原樣，不設定固定高度 */
+	button {
+	  background: #fcfbfa;
+	  border: 1px solid var(--border-color);
+	  color: var(--text-main);
+	  padding: 8px 10px;        /* 維持原本的內距 */
+	  border-radius: 6px;
+	  font-size: 0.92rem;
+	  outline: none;
+	  width: 100%;
+	  box-sizing: border-box;
 	}
+
+	/* 確保 .btn-primary 與 .btn-secondary 維持原本設定，不要加 height 或 flex 置中 */
+	.btn-primary {
+	  background: var(--accent-brown);
+	  border-color: var(--accent-brown);
+	  color: #fff;
+	  font-weight: 600;
+	  cursor: pointer;
+	  transition: opacity 0.2s;
+	}
+
+	/* 2. 【僅針對所有輸入框與下拉選單】鎖定 42px 統一高度 */
+	input, select {
+	  background: #fcfbfa;
+	  border: 1px solid var(--border-color);
+	  color: var(--text-main);
+	  border-radius: 6px;
+	  font-size: 0.92rem;
+	  outline: none;
+	  width: 100%;
+	  min-width: 0;
+	  box-sizing: border-box;
+
+	  /* 統一高度設定 */
+	  height: 42px;
+	  padding: 0 10px;
+	  line-height: normal;
+	}
+
+	/* 3. 修正 iOS Safari 下拉選單垂直對齊 */
+	select {
+	  height: 42px;
+	  line-height: 42px;
+	  -webkit-appearance: menulist; /* 保留原生下拉小箭頭 */
+	}
+
+	/* 4. 修正 iOS Safari 文字框與日期框高度與文字置中 */
+	input[type="date"],
+	input[type="text"],
+	input[type="email"],
+	input[type="number"] {
+	  height: 42px;
+	  line-height: 42px;
+	  padding: 0 10px;
+	  -webkit-appearance: none;    /* 移除 iOS 額外自帶圓角陰影 */
+	}
+
+	/* 針對 iOS 原生日期選單內容文字的垂直置中修正 */
+	input[type="date"]::-webkit-date-and-time-value {
+	  height: 42px;
+	  line-height: 42px;
+	  margin: 0;
+	  padding: 0;
+	}
+
+    <!-- input, select, button { -->
+      <!-- background: #fcfbfa; -->
+      <!-- border: 1px solid var(--border-color); -->
+      <!-- color: var(--text-main); -->
+      <!-- padding: 8px 10px; -->
+      <!-- border-radius: 6px; -->
+      <!-- font-size: 0.92rem; -->
+      <!-- outline: none; -->
+      <!-- width: 100%; -->
+	  <!-- min-width: 0;       /* 👉 新增：避免原生寬度溢出 */ -->
+    <!-- } -->
+	
+	<!-- /* 新增以下專門針對日期輸入框的樣式微調 */ -->
+	<!-- input[type="date"] { -->
+	  <!-- padding: 8px 6px;  /* 縮小左右內距 */ -->
+	  <!-- font-size: 0.86rem; /* 稍微縮小字體，確保 10 個中英文字元能完全容納 */ -->
+	  <!-- -webkit-appearance: none; /* 移除 iOS 預設的額外陰影與凸出外框 */ -->
+	<!-- } -->
 
     input:focus, select:focus {
       border-color: var(--accent-brown);
