@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
+  <!-- 引入純 JS 輕量滾輪日期套件 -->
+  <script src="https://cdn.jsdelivr.net/npm/rolldate@3.1.3/dist/rolldate.min.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>紫微斗數排盤與 AI 智能解析系統</title>
@@ -574,7 +576,9 @@
 
     <div class="form-group" id="solarDateGroup">
       <label>西曆出生年月日</label>
-      <input type="date" id="solarDate" />
+      <!-- <input type="date" id="solarDate" /> -->
+	  <!-- 改為 text，並加上 readonly 避免彈出手機虛擬英文鍵盤 -->
+	  <input type="text" id="solarDate" readonly placeholder="點擊選擇日期" style="cursor: pointer;" />
     </div>
 
     <div class="form-group" id="lunarYearGroup" style="display:none;">
@@ -1801,6 +1805,27 @@ function initDefaultDateTime() {
 
 window.onload = () => {
   initDefaultDateTime();
+  
+  // 👉 初始化年月日三輪滑動滾輪
+  new Rolldate({
+    el: '#solarDate',
+    format: 'YYYY-MM-DD',
+    beginYear: 1900,
+    endYear: 2050,
+    lang: { 
+      title: '選擇西曆出生日期',
+      cancel: '取消',
+      confirm: '確定',
+      year: '年',
+      month: '月',
+      day: '日'
+    },
+    confirm: function(date) {
+      // 選擇完畢後可自動重新排盤（選填）
+      // generateChart();
+    }
+  })
+  
   generateChart(); // 會自動排出命盤並產出 5 大主題
 };
 </script>
