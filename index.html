@@ -610,6 +610,13 @@
       0%, 100% { opacity: 0; }
       50% { opacity: 1; }
     }
+	
+	/* 僅在手機直立螢幕（雙欄排版）時生效，不影響電腦版 */
+	@media (max-width: 600px) {
+	  .control-panel .btn-primary {
+		grid-column: 2; /* 指定跳到第 2 欄（右邊），對齊上方的性別欄位 */
+	  }
+	}
   </style>
 </head>
 <body>
