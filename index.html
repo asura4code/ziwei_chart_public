@@ -611,6 +611,33 @@
       50% { opacity: 1; }
     }
 	
+	/* 排盤完成提醒橫幅 */
+    .chart-ready-notice {
+      background: linear-gradient(135deg, #fffaf5 0%, #fdf4ed 100%);
+      border: 1.5px solid var(--accent-terracotta);
+      border-radius: 10px;
+      padding: 12px 18px;
+      margin-bottom: 16px;
+      text-align: center;
+      color: var(--accent-brown);
+      font-size: 0.96rem;
+      line-height: 1.6;
+      box-shadow: 0 4px 12px rgba(184, 107, 79, 0.12);
+      animation: noticeFadeIn 0.35s ease-out;
+    }
+
+    .chart-ready-notice .highlight-name {
+      color: var(--accent-terracotta);
+      font-weight: 700;
+      font-size: 1.05rem;
+      padding: 0 2px;
+    }
+
+    @keyframes noticeFadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+	
 	/* 僅在手機直立螢幕（雙欄排版）時生效，不影響電腦版 */
 	@media (max-width: 600px) {
 	  .control-panel .btn-primary {
@@ -721,6 +748,9 @@
 	<button class="btn-primary" onclick="generateChart(true)">一鍵排盤</button>
     <!-- <button class="btn-secondary" onclick="exportJSON()">匯出 JSON</button> -->
   </div>
+  
+  <!-- 👉 在此處插入提醒容器 -->
+  <div id="chartReadyNotice" class="chart-ready-notice" style="display: none;"></div>
 
   <!-- 天盤自適應縮放外框 -->
   <div class="chart-viewport-wrapper" id="chartViewport">
@@ -1266,6 +1296,17 @@ function generateChart(isManual = false) {
   generateAllAnalysis(chart);
   
   if (isManual) {
+  
+	// 1. 取得使用者輸入的暱稱，若未填寫則以「朋友」稱呼
+    const rawName = document.getElementById("userName") ? document.getElementById("userName").value.trim() : "";
+    const displayName = rawName ? rawName : "朋友";
+    
+    // 2. 更新並顯示提醒橫幅
+    const noticeEl = document.getElementById("chartReadyNotice");
+    if (noticeEl) {
+      noticeEl.innerHTML = `✨ 親愛的 <span class="highlight-name">${displayName}</span>，您的專屬命盤已排定完成！建議可先<strong>截圖保存</strong>下方命盤，方便日後隨時查看喔！📸`;
+      noticeEl.style.display = "block";
+    }
     logChartRecord(chart, mode); // 排盤成功後，於背景非同步寫入 Google Sheet
   }
 }
