@@ -3,6 +3,7 @@
 <head>
   <!-- 引入純 JS 輕量滾輪日期套件 -->
   <script src="https://cdn.jsdelivr.net/npm/rolldate@3.1.3/dist/rolldate.min.js"></script>
+  
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>紫微斗數排盤與 AI 智能解析系統</title>
@@ -1464,14 +1465,16 @@ function parseMarkdown(md) {
 }
 
 function constructAIPrompt(chart, topic) {
+  const getPalace = (name) => chart.palaces.find(p => p.name === name) || chart.palaces[0];
+
   const mingP = chart.palaces[chart.posMing];
   const shenP = chart.palaces[chart.posShen];
-  const guanLuP = chart.palaces[(chart.posMing + 8) % 12];
-  const caiBoP = chart.palaces[(chart.posMing + 4) % 12];
-  const qianYiP = chart.palaces[(chart.posMing + 6) % 12];
-  const fuQiP = chart.palaces[(chart.posMing + 2) % 12];
-  const jiEP = chart.palaces[(chart.posMing + 5) % 12];
-  const tianZhaiP = chart.palaces[(chart.posMing + 9) % 12];													
+  const guanLuP = getPalace("官祿");
+  const caiBoP = getPalace("財帛");
+  const qianYiP = getPalace("遷移");
+  const fuQiP = getPalace("夫妻");
+  const jiEP = getPalace("疾厄");
+  const tianZhaiP = getPalace("田宅");
   const sihuaSummary = Object.entries(chart.meta.sihua).map(([star, hua]) => `${star}化${hua}`).join("、");
   
   <!-- const userName = document.getElementById("userName") ? document.getElementById("userName").value.trim() : "命主"; -->
@@ -1508,6 +1511,11 @@ function constructAIPrompt(chart, topic) {
 const STAR_KNOWLEDGE = {
   "紫微": {
     trait: "具備宏觀思維與決策氣場，重視自我價值與大局掌控",
+    workStyle: "在職場上極具自主意識與大局觀，重視話語權與決策主導地位，適合在具備戰略高度或能獨立拍板的領域深耕。",
+    advantageText: "具備宏觀統籌與領導氣場，擅長協調複雜利害關係，用威信與視野帶領團隊跨越瓶頸。",
+    mindsetStyle: "思維具有高度全局觀，自我要求極高，習慣從制高點審視問題；防禦心與自尊心較強，極度在乎個人信譽與他人認同。",
+    wealthMode: "長線佈局與階梯式增長。傾向透過組織管理溢價、核心資產長期持有或平台賦能累積身家，不屑於蠅頭小利。",
+    loveDynamic: "在關係中自帶主導氣場，欣賞能力出眾、能在精神與社交場合並肩同行的伴侶；相處時需要學會放下身段、多展現柔軟與傾聽。",
     pros: ["具備出色的統籌與領導天賦，看事情有長遠眼光", "自我要求高，在團隊中容易建立威信與公信力"],
     cons: ["自我防衛心較重，有時不易聽進瑣碎細節的建議", "習慣把壓力和責任往自己身上扛"],
     employeeJobs: "專案經理 (PM)、核心部門主管、企業儲備幹部 (MA)",
@@ -1517,21 +1525,16 @@ const STAR_KNOWLEDGE = {
     healthElement: "脾胃消化系統、自律神經與胸口悶脹",
     healthAdvice: "責任感重且自我期許高，容易因為隱性壓力引發腸胃不適或自律神經緊繃。建議養成規律運動釋放壓力，飲食保持清淡。",
     propertyTrait: "重視居住環境的質感、生活圈機能與保值潛力，適合持有核心地段的優質不動產作為長遠安全感來源。",
-    crystalAdvantage: {
-      demand: "財運、事業與領導統籌",
-      crystal: "鈦晶",
-      benefit: "強化事業運、財運、領導力與目標執行力，適合追求成長與突破的人",
-      synergy: "全面放大你的宏觀思維與決策魄力，增強事業能見度與貴人運勢，讓職涯影響力更上一層樓。"
-    },
-    crystalDisadvantage: {
-      demand: "情緒穩定與睡眠放鬆",
-      crystal: "月光石",
-      benefit: "穩定情緒、促進內在平衡、提升女性魅力與溫柔能量",
-      remedy: "化解過度緊繃的責任感與自尊包袱，釋放焦慮情緒，幫助身心在快節奏中深度放鬆，改善高壓帶來的睡眠困擾。"
-    }
+    crystalAdvantage: { demand: "財運、事業與領導統籌", crystal: "鈦晶", benefit: "強化事業運、財運、領導力與目標執行力，適合追求成長與突破的人", synergy: "全面放大你的宏觀思維與決策魄力，增強事業能見度與貴人運勢，讓職涯影響力更上一層樓。" },
+    crystalDisadvantage: { demand: "情緒穩定與睡眠放鬆", crystal: "月光石", benefit: "穩定情緒、促進內在平衡、提升女性魅力與溫柔能量", remedy: "化解過度緊繃的責任感與自尊包袱，釋放焦慮情緒，幫助身心在快節奏中深度放鬆，改善高壓帶來的睡眠困擾。" }
   },
   "天機": {
     trait: "高智商策略大腦，擅長邏輯分析、推演與敏捷策劃，是天生的核心智囊",
+    workStyle: "追求智力挑戰、策略優化與解決動態難題，無法忍受僵化死板、無意義重複且缺乏靈活度的工作流程。",
+    advantageText: "邏輯推理與敏捷應變力極強，擅長化繁為簡、建立系統流程，是團隊中不可或缺的幕僚智囊與創新推手。",
+    mindsetStyle: "思維敏捷跳躍、善於抓取底層脈絡；內心容易思慮過度，時常在腦中多工運轉，容易伴隨隱性的神經緊繃與精神內耗。",
+    wealthMode: "智力變現與專業策略溢價。善於利用資訊不對稱、技術演算法、專業諮詢或趨勢研判獲利，適合高周轉或智財授權路線。",
+    loveDynamic: "重視靈魂共鳴與深度心靈對話，需要能跟上自己思想頻率的伴侶；相處時容易太過理性剖析情緒，需多給予彼此感性的陪伴與安全感。",
     pros: ["邏輯縝密敏銳，對新科技、新工具與複雜資訊學習力極快", "臨場應變力強，擅長在動態中找出解法"],
     cons: ["思慮過度容易陷入精神內耗與焦慮", "腦袋動得太快，有時難以長時間專注在枯燥單一的事務上"],
     employeeJobs: "數據分析師、UI/UX 產品經理、AI 演算法與系統研究員",
@@ -1541,21 +1544,16 @@ const STAR_KNOWLEDGE = {
     healthElement: "肝膽代謝、自律神經、肩頸關節緊繃",
     healthAdvice: "用腦過度容易導致失眠、偏頭痛或神經緊繃。平常需多注重護眼與肩頸伸展，睡前少滑手機，多接觸大自然幫助身心落地。",
     propertyTrait: "居住環境變動性較大，喜歡彈性租屋或定期改變室內陳設。置產挑選宜以交通便利的交通樞紐生活圈為首選。",
-    crystalAdvantage: {
-      demand: "直覺靈感與策略策劃",
-      crystal: "葡萄石",
-      benefit: "提升直覺力、幫助整理思緒、增強內在覺察與判斷力",
-      synergy: "強化你敏銳的邏輯推理與策劃直覺，在龐雜瑣碎的資訊中快速理清脈絡，讓每一步決策更加精準前瞻。"
-    },
-    crystalDisadvantage: {
-      demand: "情緒穩定與睡眠放鬆",
-      crystal: "茶晶（茶水晶）",
-      benefit: "穩定情緒、減輕壓力與焦慮、增強踏實感，幫助在忙碌生活中保持平衡",
-      remedy: "讓過度活躍、跳躍奔馳的思緒落地扎根，緩解大腦過載的焦躁感，安撫自律神經，找回身心踏實感與深度睡眠。"
-    }
+    crystalAdvantage: { demand: "直覺靈感與策略策劃", crystal: "葡萄石", benefit: "提升直覺力、幫助整理思緒、增強內在覺察與判斷力", synergy: "強化你敏銳的邏輯推理與策劃直覺，在龐雜瑣碎的資訊中快速理清脈絡，讓每一步決策更加精準前瞻。" },
+    crystalDisadvantage: { demand: "情緒穩定與睡眠放鬆", crystal: "茶晶（茶水晶）", benefit: "穩定情緒、減輕壓力與焦慮、增強踏實感，幫助在忙碌生活中保持平衡", remedy: "讓過度活躍、跳躍奔馳的思緒落地扎根，緩解大腦過載的焦躁感，安撫自律神經，找回身心踏實感與深度睡眠。" }
   },
   "太陽": {
     trait: "熱情坦率、自帶光芒與感召力，樂於分享資源並照亮身邊夥伴",
+    workStyle: "重視社會公信力、工作帶來的正面影響力與公眾認同，在能夠展現理念、對外宣導或凝聚人心的舞台最能發光發熱。",
+    advantageText: "表達與感染力強大，善於傳遞願景並凝聚團隊共識，適合擔任對外發言、市場拓展或公關樞紐。",
+    mindsetStyle: "胸懷磊落、富正義感，處事坦率大器；習慣為他人著想與承擔責任，但若付出未獲肯定，內心容易累積失落與疲憊。",
+    wealthMode: "聲譽變現與人脈磁場聚財。財富往往跟隨個人公信力、知名度與群眾影響力而來，先立名而後得利，講究光明磊落的進財方式。",
+    loveDynamic: "在關係中慷慨大方、樂於照顧對方，有強烈的保護欲；但同時極度需要伴侶真誠的崇拜、肯定與讚美，最忌被冷落無視。",
     pros: ["表達力與渲染力極強，處事坦蕩真誠", "富有正義感與團隊責任心，天生自帶凝聚力"],
     cons: ["容易大包大攬、背負過多非必要的人情負擔", "直來直往的表達有時少了轉圜緩衝"],
     employeeJobs: "公關發言人、品牌行銷企劃、商務拓展主管 (BD)",
@@ -1565,21 +1563,16 @@ const STAR_KNOWLEDGE = {
     healthElement: "心血管循環、血壓調節、眼部疲勞",
     healthAdvice: "容易因為行程緊湊或過度熱心而熬夜透支，導致虛火上升與眼部乾澀。日常宜多補水、維持規律作息，適度安排溫和運動。",
     propertyTrait: "住家偏好大面採光、開闊通風的高樓層或好視野住宅，明亮開闊的空間更有助於聚氣與維持好心情。",
-    crystalAdvantage: {
-      demand: "自信、行動力與公信影響力",
-      crystal: "太陽石",
-      benefit: "提升自信心、正能量與行動力，改善低潮與缺乏動力的狀態",
-      synergy: "與你自帶光芒、樂於助人的特質相呼應，加乘個人魅力與號召力，讓你的職場溝通與社交發揮更大影響力。"
-    },
-    crystalDisadvantage: {
-      demand: "防負能量與建立心理界線",
-      crystal: "黑碧璽",
-      benefit: "阻隔負能量、建立能量界線、減少外界情緒干擾，適合高壓工作環境",
-      remedy: "幫助你在熱情付出的同時設立健康的心理邊界，看清無效社交，阻斷外界的情緒勒索與負面能量消耗。"
-    }
+    crystalAdvantage: { demand: "自信、行動力與公信影響力", crystal: "太陽石", benefit: "提升自信心、正能量與行動力，改善低潮與缺乏動力的狀態", synergy: "與你自帶光芒、樂於助人的特質相呼應，加乘個人魅力與號召力，讓你的職場溝通與社交發揮更大影響力。" },
+    crystalDisadvantage: { demand: "防負能量與建立心理界線", crystal: "黑碧璽", benefit: "阻隔負能量、建立能量界線、減少外界情緒干擾，適合高壓工作環境", remedy: "幫助你在熱情付出的同時設立健康的心理邊界，看清無效社交，阻斷外界的情緒勒索與負面能量消耗。" }
   },
   "武曲": {
     trait: "務實果斷、追求實質產出，對數據、財務與商業價值極具敏銳度",
+    workStyle: "極度講求實質產出、明確的 KPI 與投資報酬率（ROI），行事注重效率與結果，不喜虛浮空泛的場面話。",
+    advantageText: "執行力堅決且對財務、數據與資源極度敏銳，耐磨耐壓，擅長以扎實可衡量的績效建立無可取代的專業地位。",
+    mindsetStyle: "處事極度冷靜務實，以解決實質問題為最高準則；對虛浮情感承諾較少感應，堅信唯有實力和資源才是最可靠的底氣。",
+    wealthMode: "專業技術與資本複利型。擅長實戰打拼、精算現金流與資產配置，靠嚴格的財務紀律與硬核實力滾動出穩固財富。",
+    loveDynamic: "習慣用提供生活物質保障、解決現實難題來表達愛意；不擅長甜言蜜語，相處需要有意識地增加生活情趣與情緒關懷。",
     pros: ["執行力破表，做事講求效率與投資回報率", "抗壓性極高，耐得住寂寞與實戰歷練"],
     cons: ["處事偏嚴謹客觀，在人際溝通中容易顯得過於理性直接", "有時給人較難親近的距離感"],
     employeeJobs: "財務分析師、投資研究員、風險精算師、資產配置顧問",
@@ -1589,21 +1582,16 @@ const STAR_KNOWLEDGE = {
     healthElement: "呼吸道支氣管、肺部敏感、運動關節防護",
     healthAdvice: "換季時呼吸道較敏感，容易有鼻過敏或喉嚨乾燥。平時若有重訓或高強度運動，需特別留意暖身與關節防護。",
     propertyTrait: "具備天生的存錢置產意識，偏好保值抗跌、精華成熟生活圈的鋼骨耐震成屋，能發揮扎實的聚財效果。",
-    crystalAdvantage: {
-      demand: "財運、事業與目標執行力",
-      crystal: "鈦晶",
-      benefit: "強化事業運、財運、領導力與目標執行力，適合追求成長與突破的人",
-      synergy: "完美契合你務實敏銳的商業嗅覺，強化談判氣場與目標達成力，讓專業深耕轉化為具體的財富成果。",
-    },
-    crystalDisadvantage: {
-      demand: "職場人際與人緣親和力",
-      crystal: "粉晶",
-      benefit: "提升人緣與親和力、增進感情運、自我接納與愛自己",
-      remedy: "軟化過於理性直接的防禦外殼，增添溝通親和力與共情能力，潤滑職場與感情互動，減少孤軍奮戰的疲憊感。"
-    }
+    crystalAdvantage: { demand: "財運、事業與目標執行力", crystal: "鈦晶", benefit: "強化事業運、財運、領導力與目標執行力，適合追求成長與突破的人", synergy: "完美契合你務實敏銳的商業嗅覺，強化談判氣場與目標達成力，讓專業深耕轉化為具體的財富成果。" },
+    crystalDisadvantage: { demand: "職場人際與人緣親和力", crystal: "粉晶", benefit: "提升人緣與親和力、增進感情運、自我接納與愛自己", remedy: "軟化過於理性直接的防禦外殼，增添溝通親和力與共情能力，潤滑職場與感情互動，減少孤軍奮戰的疲憊感。" }
   },
   "天同": {
     trait: "溫柔和諧、高情商共情力、具生活審美品味，追求心靈平靜與人際圓融",
+    workStyle: "重視職場環境的和諧度、人際友善氛圍與身心平衡，比起殘酷廝殺的零和競爭，更傾向在合作共享中發揮細膩價值。",
+    advantageText: "具備高情商與同理協調力，擅長化解團隊內部摩擦，在人際溝通、客戶關懷或人文美學領域能展現極高親和力。",
+    mindsetStyle: "知足常樂、追求心靈平和，具有極強的同理感知力；討厭衝突與針鋒相對，面對壓力時偶爾有選擇性逃避的傾向。",
+    wealthMode: "口碑人脈與服務價值溢價。靠好人緣、細緻體驗與細水長流的客戶信賴累積財富，不適宜操作高風險短炒或極限槓桿。",
+    loveDynamic: "重視情感陪伴與細膩的情緒共鳴，渴望被寵愛與呵護；面對衝突容易委屈退縮，需要伴侶具備足夠的溫柔與耐心包容。",
     pros: ["親和力極高，擅長營造融洽的團隊氛圍", "具備生活情調與審美感知力，懂得享受生活中的小確幸"],
     cons: ["面對競爭時偶爾缺乏爭取的狠勁", "遇到尖銳衝突時容易出現逃避或拖延傾向"],
     employeeJobs: "心理諮商師、企業培訓師、醫療照護與高階客戶關係管理",
@@ -1613,21 +1601,16 @@ const STAR_KNOWLEDGE = {
     healthElement: "體液循環、內分泌平衡、水腫體質",
     healthAdvice: "容易因為久坐或水分代謝慢而水腫，或因情緒起伏影響內分泌。日常宜適度減少精緻糖分，多安排規律的有氧活動促進代謝。",
     propertyTrait: "重視居住的舒適感、溫馨美學與周邊悠閒機能（如鄰近公園、咖啡廳），喜歡用質感軟裝打造放鬆的居家小天地。",
-    crystalAdvantage: {
-      demand: "職場人際與和諧溝通",
-      crystal: "海藍寶",
-      benefit: "強化溝通表達能力、改善人際互動、增加說話與簡報時的自信",
-      synergy: "將你善解人意的親和天賦與溝通力深度結合，讓溫和真誠的訴求能被清晰聽見，轉化為豐沛的貴人資源。"
-    },
-    crystalDisadvantage: {
-      demand: "自信、行動力與突破拖延",
-      crystal: "太陽石",
-      benefit: "提升自信心、正能量與行動力，改善低潮與缺乏動力的狀態",
-      remedy: "激發內在積極主動的突破動力，打破安逸惰性與逃避衝突的拖延慣性，勇敢站出來爭取屬於你的成果。"
-    }
+    crystalAdvantage: { demand: "職場人際與和諧溝通", crystal: "海藍寶", benefit: "強化溝通表達能力、改善人際互動、增加說話與簡報時的自信", synergy: "將你善解人意的親和天賦與溝通力深度結合，讓溫和真誠的訴求能被清晰聽見，轉化為豐沛的貴人資源。" },
+    crystalDisadvantage: { demand: "自信、行動力與突破拖延", crystal: "太陽石", benefit: "提升自信心、正能量與行動力，改善低潮與缺乏動力的狀態", remedy: "激發內在積極主動的突破動力，打破安逸惰性與逃避衝突的拖延慣性，勇敢站出來爭取屬於你的成果。" }
   },
   "廉貞": {
     trait: "個人風格強烈、敏銳有洞見，兼具自我原則與跳脫常規的突破創新力",
+    workStyle: "極具個人原則與敏銳洞察，做事講究策略佈局，適合在需應對複雜人性、危機處理或突破常規的領域大展拳腳。",
+    advantageText: "嗅覺敏銳、具備強烈突破精神與鮮明風格，敢於打破既有局限，在市場開拓或公關危機中能打出漂亮硬仗。",
+    mindsetStyle: "思維敏銳深刻、自我防衛意識高；對人事物的直覺判斷極準，具備鮮明的是非觀與原則感，不易輕信他人承諾。",
+    wealthMode: "智謀破局與品牌風格溢價。擅長在競爭激烈的市場中找到特殊突破口，靠獨特美學、專業特許或策略性商業模式創造高回報。",
+    loveDynamic: "情感炙熱且愛恨分明，對伴侶的忠誠度與靈魂純粹度要求極高；容易因為防衛心產生無謂的試探，需建立透明健康的互信機制。",
     pros: ["記憶力與洞察力過人，做事條理清晰且具備鮮明的個人魅力", "敢於挑戰常規標準"],
     cons: ["好勝心較強、心思敏銳，遇到挫折容易產生防備與懷疑心態", "性格較有稜角"],
     employeeJobs: "法律法務合規、品牌創意總監、活動策略總策劃、公關危機處理",
@@ -1637,21 +1620,16 @@ const STAR_KNOWLEDGE = {
     healthElement: "血液循環、肌膚敏感、作息緊張引起的心悸",
     healthAdvice: "神經敏銳度高、容易因為思慮過度導致睡眠品質欠佳或皮膚泛紅過敏。建議養成規律作息，適度排解日常緊繃情緒。",
     propertyTrait: "講究室內設計的風格感與格調。購屋置產時需多留意管委會品質與鄰里和睦度，確保居住品質免受瑣事干擾。",
-    crystalAdvantage: {
-      demand: "直覺靈感與個人品牌魅力",
-      crystal: "彩月光",
-      benefit: "增加個人魅力、靈感與創造力，幫助展現自信光彩",
-      synergy: "激發你獨特的美學靈感與商業敏銳度，在市場競爭中脫穎而出，把好創意變現為無可替代的個人品牌影響力。"
-    },
-    crystalDisadvantage: {
-      demand: "防負能量與化解人際內耗",
-      crystal: "銀曜石",
-      benefit: "看清人際關係本質、提升洞察力、避免情緒消耗與人際內耗",
-      remedy: "幫助你冷靜看清人際互動背後的真實動機，化解心中的執念與防備猜疑，避免捲入無謂的職場政治與情緒消耗。"
-    }
+    crystalAdvantage: { demand: "直覺靈感與個人品牌魅力", crystal: "彩月光", benefit: "增加個人魅力、靈感與創造力，幫助展現自信光彩", synergy: "激發你獨特的美學靈感與商業敏銳度，在市場競爭中脫穎而出，把好創意變現為無可替代的個人品牌影響力。" },
+    crystalDisadvantage: { demand: "防負能量與化解人際內耗", crystal: "銀曜石", benefit: "看清人際關係本質、提升洞察力、避免情緒消耗與人際內耗", remedy: "幫助你冷靜看清人際互動背後的真實動機，化解心中的執念與防備猜疑，避免捲入無謂的職場政治與情緒消耗。" }
   },
   "天府": {
     trait: "穩健大器、掌控全場、擅長資源整合與資產守成，天生自帶安全感底盤",
+    workStyle: "行事沉穩大器、講求守成與永續運作，重視平台的規模穩定性與資源深度，善於長線耕耘與資產佈局。",
+    advantageText: "抗風險與全局調度能力極強，擅長大體量資源的規劃分配與體制守成，是組織中最值得信賴的幕後掌舵人。",
+    mindsetStyle: "性格沉穩大度、情緒定力極佳；重視安全感與生活掌控力，信奉長線複利與穩紮穩打，不願涉足不可控的冒險。",
+    wealthMode: "資產守成與現金流聚合。天生的財庫之星，極其擅長守財、保值與多渠道資產配置，能將各方收益沉澱為厚實家底。",
+    loveDynamic: "重視家庭責任與共同生活的踏實感，追求成熟穩健、能攜手構築未來的伴侶；相處風格務實，偶爾缺少些許浪漫變化。",
     pros: ["心胸開闊，擅長全局資源調度與長線佈局", "抗風險韌性極佳，處事沉穩可靠、令人安心"],
     cons: ["突破舒適圈的冒險動力稍弱", "重視生活享受，容易安於現狀而錯過急遽轉型時機"],
     employeeJobs: "高階資產管理、金融保險主管、大型企業營運管理、公部門管理職",
@@ -1661,21 +1639,16 @@ const STAR_KNOWLEDGE = {
     healthElement: "脾胃代謝、消化機能、體重與血脂管理",
     healthAdvice: "吸收代謝良好，若經常聚餐享受美食容易有代謝變慢或體重上升困擾。平時宜維持原型清淡飲食，定期安排健檢追蹤健康指標。",
     propertyTrait: "房產運勢極旺！天生具備累積實體資產的優勢，善於持有抗跌房產收租，打造充沛的長期現金流。",
-    crystalAdvantage: {
-      demand: "財運、事業與資產累積",
-      crystal: "黃水晶",
-      benefit: "提升財運、工作表現、自信心與行動力，適合想增加收入、業績或事業發展的人",
-      synergy: "激發你穩健的資產守護天賦，提升商業直覺與營收拓展速度，讓穩紮穩打的佈局更快轉化為豐沛現金流。"
-    },
-    crystalDisadvantage: {
-      demand: "自信、行動力與突破守成",
-      crystal: "黑髮晶",
-      benefit: "增強決策力、執行力與抗壓性，同時具有保護氣場作用",
-      remedy: "賦予你跨出守成框架的果敢魄力與決斷力，在轉型關鍵期勇敢出擊，打破安逸猶豫的心理瓶頸。"
-    }
+    crystalAdvantage: { demand: "財運、事業與資產累積", crystal: "黃水晶", benefit: "提升財運、工作表現、自信心與行動力，適合想增加收入、業績或事業發展的人", synergy: "激發你穩健的資產守護天賦，提升商業直覺與營收拓展速度，讓穩紮穩打的佈局更快轉化為豐沛現金流。" },
+    crystalDisadvantage: { demand: "自信、行動力與突破守成", crystal: "黑髮晶", benefit: "增強決策力、執行力與抗壓性，同時具有保護氣場作用", remedy: "賦予你跨出守成框架的果敢魄力與決斷力，在轉型關鍵期勇敢出擊，打破安逸猶豫的心理瓶頸。" }
   },
   "太陰": {
     trait: "細膩內斂、觀察入微，重視生活品味與深層情感連結的質感靈魂",
+    workStyle: "處事細緻縝密、講求條理與美感，重視工作環境的隱私與穩定節奏，適合深耕幕僚企劃、財務稽核或質感生活領域。",
+    advantageText: "具備頂級的細節專注力與耐性，擅長抽絲剝繭、資產管理與精緻化產出，能把瑣碎繁複的事務打理得井井有條。",
+    mindsetStyle: "內心細緻敏感、善解人意，具有豐沛的情感與直覺；遇到紛爭傾向隱忍退讓，容易在心裡默默消化委屈。",
+    wealthMode: "積水成淵與長線不動產收益。善於透過定期儲蓄、優質房地產投資或低波動收益型資產，實現長期安定的財富滾動。",
+    loveDynamic: "溫柔含蓄、深情且具奉獻精神，需要伴侶給予足夠細膩的情緒安全感；相處時偶有多愁善感，需要被溫柔接納。",
     pros: ["做事極為細緻縝密，耐性極佳", "直覺敏銳，具備強大的同理心與照護特質"],
     cons: ["容易把心事悶在心裡、多愁善感", "面對正面衝突時容易委屈退縮"],
     employeeJobs: "財務審計、精品企劃、品牌刊物主編、空間美學與室內設計師",
@@ -1685,21 +1658,16 @@ const STAR_KNOWLEDGE = {
     healthElement: "內分泌機能、婦科/體液調節、視力疲勞",
     healthAdvice: "體質偏寒涼或敏感，多愁善感易影響自律神經與內分泌平衡。平時要注意四肢腹部保暖，多曬溫和朝陽，少吃生冷冰品。",
     propertyTrait: "房產置產運勢絕佳！特別偏好具水岸景觀、安靜巷弄的質感好宅，靠穩健持有房屋獲利豐厚。",
-    crystalAdvantage: {
-      demand: "氣色、魅力與生活美學展現",
-      crystal: "石榴石",
-      benefit: "增加活力、自信與魅力，象徵由內而外的好氣色與生命力",
-      synergy: "共振你溫柔優雅的特質，活絡內在身心氣場，散發由內而外的好氣色與從容光彩，提升親和魅力。"
-    },
-    crystalDisadvantage: {
-      demand: "情緒穩定與睡眠放鬆",
-      crystal: "月光石",
-      benefit: "穩定情緒、促進內在平衡、提升女性魅力與溫柔能量",
-      remedy: "撫平內心起伏的情緒浪潮，建立穩固的心理安全感，告別胡思亂想與多愁善感，找回安心定力與良好睡眠。"
-    }
+    crystalAdvantage: { demand: "氣色、魅力與生活美學展現", crystal: "石榴石", benefit: "增加活力、自信與魅力，象徵由內而外的好氣色與生命力", synergy: "共振你溫柔優雅的特質，活絡內在身心氣場，散發由內而外的好氣色與從容光彩，提升親和魅力。" },
+    crystalDisadvantage: { demand: "情緒穩定與睡眠放鬆", crystal: "月光石", benefit: "穩定情緒、促進內在平衡、提升女性魅力與溫柔能量", remedy: "撫平內心起伏的情緒浪潮，建立穩固的心理安全感，告別胡思亂想與多愁善感，找回安心定力與良好睡眠。" }
   },
   "貪狼": {
     trait: "多才多藝、社交魅力天花板，以好奇心與野心驅動的跨界探索家",
+    workStyle: "追求多元彈性與跨界新契機，不喜歡一成不變的單調體制，擅長在人際網絡、市場趨勢與新興風口中捕捉獲利機會。",
+    advantageText: "公關社交與資源整合手腕極佳，市場敏銳度高，能迅速適應未知領域，靠敏捷變通與人脈槓桿撬動巨大成效。",
+    mindsetStyle: "思維靈活多元、慾望與好奇心旺盛；極度熱愛新鮮感與挑戰，但需提防目標過於發散或三分鐘熱度的盲點。",
+    wealthMode: "人脈變現與跨界機會財。擅長掌握商業趨勢與社交紅利，進財管道靈活多樣，但務必建立嚴格的止盈止損防線以免得而復失。",
+    loveDynamic: "魅力十足、擅長營造浪漫情調，追求充滿新鮮感與火花的互動；討厭平淡索然的生活，伴侶需具備共同探索世界的熱情。",
     pros: ["學習適應力驚人，在各類社交場合中如魚得水", "敢於嘗試新事物、勇敢追求心中想望"],
     cons: ["涉獵廣泛但容易三分鐘熱度", "容易受到短期投機誘惑而分散精力"],
     employeeJobs: "國際業務拓展 (BD)、娛樂文化經紀、整合行銷公關、新零售通路總監",
@@ -1709,21 +1677,16 @@ const STAR_KNOWLEDGE = {
     healthElement: "肝膽代謝機能、日常體力透支、生殖泌尿系統",
     healthAdvice: "社交應酬多容易消耗精力與睡眠。平時要避免過度熬夜與飲酒，維持規律的作息平衡，留時間讓身體深層充電。",
     propertyTrait: "居家風格重視氛圍感、開放式吧台或影音視聽娛樂區。置產時建議以剛需自住為核心，避免因短線投機而打亂財務節奏。",
-    crystalAdvantage: {
-      demand: "氣色、魅力與人脈資源整合",
-      crystal: "彩月光",
-      benefit: "增加個人魅力、靈感與創造力，幫助展現自信光彩",
-      synergy: "將你頂級的社交與跨界適應力極致發揮，吸引高質量人脈與合作契機，打造亮眼吸睛的自信氣場。"
-    },
-    crystalDisadvantage: {
-      demand: "淨化能量與提升專注定性",
-      crystal: "白水晶",
-      benefit: "淨化能量、提升專注力、放大其他水晶能量，屬於萬用型水晶",
-      remedy: "清理雜念與浮躁慾望，強化意志力與專注度，幫助聚焦核心目標、克服三分鐘熱度，避免衝動冒進造成資源分散。"
-    }
+    crystalAdvantage: { demand: "氣色、魅力與人脈資源整合", crystal: "彩月光", benefit: "增加個人魅力、靈感與創造力，幫助展現自信光彩", synergy: "將你頂級的社交與跨界適應力極致發揮，吸引高質量人脈與合作契機，打造亮眼吸睛的自信氣場。" },
+    crystalDisadvantage: { demand: "淨化能量與提升專注定性", crystal: "白水晶", benefit: "淨化能量、提升專注力、放大其他水晶能量，屬於萬用型水晶", remedy: "清理雜念與浮躁慾望，強化意志力與專注度，幫助聚焦核心目標、克服三分鐘熱度，避免衝動冒進造成資源分散。" }
   },
   "巨門": {
     trait: "洞察深邃、長於思辨分析，具備強大邏輯與語言影響力的深度觀察家",
+    workStyle: "重視底層邏輯、批判思維與專業發言權，擅長透過鑽研技術、精準文字或語言輸出樹立自身的不可替代性。",
+    advantageText: "洞察犀利且邏輯嚴謹，擅長找出系統漏洞、把關合規風險，並能運用強大的語言與文字說服力贏得大眾信任。",
+    mindsetStyle: "思維深沉敏銳、善於質疑與思辨；具有強烈的危機意識與洞察力，防備心較強，需要充分的事實依據才能給予信任。",
+    wealthMode: "知識技能與專業口才溢價。靠硬核技術、調查諮詢、法律合規或語言文字輸出確立收費標準，屬於專業話語權生財型。",
+    loveDynamic: "慢熱且防備心重，非常看重深層的精神理解與承諾兌現；相處時容易口是心非或過度挑剔，學會直白表達溫暖是關鍵。",
     pros: ["批判性思考能力極強，能看透事物表象下的底層邏輯與潛在瑕疵", "擅長用邏輯與文字說服大眾"],
     cons: ["容易因為表達太過犀利直接而引發人際誤解", "戒心與多疑容易造成人際距離感"],
     employeeJobs: "專業律師、專利審查員、調查記者、軟體資訊安全與架構工程師",
@@ -1733,21 +1696,16 @@ const STAR_KNOWLEDGE = {
     healthElement: "口腔咽喉、支氣管呼吸道、消化道胃酸調節",
     healthAdvice: "用嗓多時咽喉容易乾澀疲憊，壓力大時需留意胃酸過多或消化不良。平常宜多喝溫水潤喉，找到合適的管道釋放情緒。",
     propertyTrait: "重視居家環境的隱私感與隔音防噪品質。看房置產需特別注意管線通暢與產權細節，避開喧囂街道或環境雜亂處。",
-    crystalAdvantage: {
-      demand: "職場人際與專業表達說服",
-      crystal: "海藍寶",
-      benefit: "強化溝通表達能力、改善人際互動、增加說話與簡報時的自信",
-      synergy: "疏通溝通與表達能量，將犀利深刻的觀察轉化為高情商的說服力，讓演講、簡報或專業輸出更具感染力與信任度。"
-    },
-    crystalDisadvantage: {
-      demand: "防負能量與化解是非猜忌",
-      crystal: "銀曜石",
-      benefit: "看清人際關係本質、提升洞察力、避免情緒消耗與人際內耗",
-      remedy: "築起堅固的心理防護罩，阻絕外界流言與小人干擾，幫助你放下過度防備的戒心，在人際相處中泰然自若。"
-    }
+    crystalAdvantage: { demand: "職場人際與專業表達說服", crystal: "海藍寶", benefit: "強化溝通表達能力、改善人際互動、增加說話與簡報時的自信", synergy: "疏通溝通與表達能量，將犀利深刻的觀察轉化為高情商的說服力，讓演講、簡報或專業輸出更具感染力與信任度。" },
+    crystalDisadvantage: { demand: "防負能量與化解是非猜忌", crystal: "銀曜石", benefit: "看清人際關係本質、提升洞察力、避免情緒消耗與人際內耗", remedy: "築起堅固的心理防護罩，阻絕外界流言與小人干擾，幫助你放下過度防備的戒心，在人際相處中泰然自若。" }
   },
   "天相": {
     trait: "儀態得體、重視承諾信用與平衡協調，是讓人安心信賴的幕僚推手",
+    workStyle: "講究契約信用、職場人際平衡與體制合規，重視個人在組織中的口碑與形象，是天然的高階幕僚與跨部門協調者。",
+    advantageText: "得體周到、溝通協調力頂尖，能精準承接上級意志並落實到位，在多方博弈中能扮演穩定各方的關鍵中樞。",
+    mindsetStyle: "思維客觀理性、講求秩序與人際和諧；待人周到得體，但有時過於在意外界眼光與評價，容易陷入選擇性猶豫。",
+    wealthMode: "平台賦能與信用中介溢價。透過優質平台的分潤、居中協調人脈資源或高信譽專業職能獲利，不宜單打獨鬥冒險博弈。",
+    loveDynamic: "重視伴侶的談吐氣質、道德品格與家庭觀念；相處講究相敬如賓與互相扶持，能給予另一半極大的支持與體面。",
     pros: ["溝通協調力一流，注重形象與信譽", "具備出色的執行力，能將上位者的願景妥善落地"],
     cons: ["面對重大決定時容易猶豫不決，缺乏拍板的狠勁", "過度在意外界評價容易造成心力交瘁"],
     employeeJobs: "高階秘書、行政幕僚長、公證法務、人力資源 (HR) 總監",
@@ -1757,21 +1715,16 @@ const STAR_KNOWLEDGE = {
     healthElement: "體液代謝調節、皮膚屏障過敏、面部水腫",
     healthAdvice: "水分代謝機能需多留意，容易有皮膚乾燥、敏弱泛紅或水腫。平時宜多喝溫水、維持清淡少鹽飲食。",
     propertyTrait: "偏好管理嚴謹、公設完善的高質感電梯大樓。重視迎賓大廳與梯間氛圍，房產具備穩健的保值優勢。",
-    crystalAdvantage: {
-      demand: "職場人際與人脈信任樞紐",
-      crystal: "粉晶",
-      benefit: "提升人緣與親和力、增進感情運、自我接納與愛自己",
-      synergy: "加乘你的優雅協調魅力，深化各方對你的信任感與依賴度，成為團隊與跨部門合作中不可或缺的定海神針。",
-    },
-    crystalDisadvantage: {
-      demand: "自信、行動力與自主拍板力",
-      crystal: "黑髮晶",
-      benefit: "增強決策力、執行力與抗壓性，同時具有保護氣場作用",
-      remedy: "賦予你堅決拍板的底氣與主見，擺脫過度在意外界眼光的心累內耗，在關鍵時刻果斷捍衛自身立場。"
-    }
+    crystalAdvantage: { demand: "職場人際與人脈信任樞紐", crystal: "粉晶", benefit: "提升人緣與親和力、增進感情運、自我接納與愛自己", synergy: "加乘你的優雅協調魅力，深化各方對你的信任感與依賴度，成為團隊與跨部門合作中不可或缺的定海神針。" },
+    crystalDisadvantage: { demand: "自信、行動力與自主拍板力", crystal: "黑髮晶", benefit: "增強決策力、執行力與抗壓性，同時具有保護氣場作用", remedy: "賦予你堅決拍板的底氣與主見，擺脫過度在意外界眼光的心累內耗，在關鍵時刻果斷捍衛自身立場。" }
   },
   "天梁": {
     trait: "成熟穩重、自帶前輩風範與長輩貴人光環，具備逢凶化吉的危機化解力",
+    workStyle: "重視職業道德、公信力與專業傳承，擅長扮演指導導師或制度守護者，在講究資歷、經驗與排解糾紛的領域最具威信。",
+    advantageText: "自帶長輩緣與社會信賴感，處事客觀冷靜、具備化險為夷的天賦，適合在需要公信力背書或危機仲裁的領域深耕。",
+    mindsetStyle: "思維成熟老練、自律心強，富有社會責任感；樂於助人與分享人生經驗，但有時容易陷入好為人師或嚴肅自律的枷鎖。",
+    wealthMode: "名聲信賴與專業長青型收益。多來自長期穩定的體制薪酬、顧問諮詢費、著作專利或繼承長輩庇蔭，非靠短線投機發跡。",
+    loveDynamic: "在關係中常扮演照顧者或指引者的角色，自帶包容力；相處宜放下指導者的嚴肅姿態，多融入同輩般的輕鬆幽默。",
     pros: ["深具社會公信力與長輩緣，處事客觀公正", "面對突發危機時能冷靜客觀抽離，化險為夷"],
     cons: ["容易熱心過度、好為人師", "有時給人較嚴肅說教感，自我期許與框架較多"],
     employeeJobs: "法官檢察官、醫療醫師藥師、非營利公益組織管理、學術研究教授",
@@ -1781,21 +1734,16 @@ const STAR_KNOWLEDGE = {
     healthElement: "腸胃消化、脊椎腰頸關節、筋骨保養",
     healthAdvice: "久坐時需注意坐姿端正，預防腰頸椎緊繃或骨質問題。平時宜維持伸展拉筋習慣，維持筋骨靈活度。",
     propertyTrait: "容易承接長輩庇蔭或得資助購屋。偏好文教氣息濃厚、鬧中取靜的生活圈，居家裝潢喜愛溫潤木質沉穩風格。",
-    crystalAdvantage: {
-      demand: "直覺靈感與逢凶化吉貴人運",
-      crystal: "白阿賽（白阿賽斯特萊）",
-      benefit: "提升能量頻率、淨化身心、增強內在平靜與靈性覺察",
-      synergy: "提升直覺敏銳度，淨化心緒雜念，放大你自帶前輩貴人相助與化解危機的天賦。"
-    },
-    crystalDisadvantage: {
-      demand: "職場人際與親和包容",
-      crystal: "粉晶",
-      benefit: "提升人緣與親和力、增進感情運、自我接納與愛自己",
-      remedy: "軟化嚴肅說教的距離感，為待人處事注入幽默感與柔軟共情，讓人際往來更顯親切自然。"
-    }
+    crystalAdvantage: { demand: "直覺靈感與逢凶化吉貴人運", crystal: "白阿賽（白阿賽斯特萊）", benefit: "提升能量頻率、淨化身心、增強內在平靜與靈性覺察", synergy: "提升直覺敏銳度，淨化心緒雜念，放大你自帶前輩貴人相助與化解危機的天賦。" },
+    crystalDisadvantage: { demand: "職場人際與親和包容", crystal: "粉晶", benefit: "提升人緣與親和力、增進感情運、自我接納與愛自己", remedy: "軟化嚴肅說教的距離感，為待人處事注入幽默感與柔軟共情，讓人際往來更顯親切自然。" }
   },
   "七殺": {
     trait: "雷厲風行、大將之風、果斷霸氣，敢打硬仗且執行力極強的開路先鋒",
+    workStyle: "目標導向極強，敢打硬仗、不畏高壓，喜歡獨立掌舵開拓新戰場，在面對未知挑戰時能以驚人的魄力迅速突圍。",
+    advantageText: "行動敏捷、敢於承擔高風險與大責任，善於破除推進阻礙，是組織拓荒、拯救瀕危專案或攻城掠地的王牌將領。",
+    mindsetStyle: "思維極度果決獨立、目標導向明確；討厭拖泥帶水與虛情假意，敢想敢拚，但面對瑣碎折衝容易缺乏耐性。",
+    wealthMode: "開疆闢土與高風險高回報型。善於抓住空白市場或動盪期的逆勢機會大膽獲利，但必須建立穩固的防守底盤以免大起大落。",
+    loveDynamic: "愛恨極其分明、全情投入且不拐彎抹角；相處時性子較烈，容易因講話太衝引發摩擦，需要學會在親近關係中適度示弱。",
     pros: ["敢於扛起重任、不畏艱難，行動推展速度極快", "目標導向，具備強大的開拓與戰鬥意志"],
     cons: ["性子偏急，較缺乏長時間妥協折衝的耐性", "習慣單打獨鬥，不擅長主動開口求援"],
     employeeJobs: "高風險創投主管、重工製造開疆廠長、突發專案救火隊負責人、執法管理",
@@ -1805,21 +1753,16 @@ const STAR_KNOWLEDGE = {
     healthElement: "呼吸道代謝、腸胃排毒、運動拉傷與磕碰",
     healthAdvice: "衝勁大、行動快，運動時要做好防護避免拉傷磕碰。日常避免急躁進食，多做深呼吸冥想平復心氣。",
     propertyTrait: "喜歡打破重來，常見老屋翻新改造、或買毛胚屋親自監工裝潢之象。置產切忌過度放大財務槓桿。",
-    crystalAdvantage: {
-      demand: "財運、事業與衝鋒魄力",
-      crystal: "鈦晶",
-      benefit: "強化事業運、財運、領導力與目標執行力，適合追求成長與突破的人",
-      synergy: "加乘雷厲風行的決策魄力與開拓氣勢，讓你敢於跨出舒適圈，在激烈的競爭市場中果斷搶佔先機。"
-    },
-    crystalDisadvantage: {
-      demand: "情緒穩定與身心神經放鬆",
-      crystal: "茶晶（茶水晶）",
-      benefit: "穩定情緒、減輕壓力與焦慮、增強踏實感，幫助在忙碌生活中保持平衡",
-      remedy: "平息急躁與焦慮的情緒火氣，讓緊繃的神經系統深度放鬆，在沉著冷靜中穩健前行、行穩致遠。"
-    }
+    crystalAdvantage: { demand: "財運、事業與衝鋒魄力", crystal: "鈦晶", benefit: "強化事業運、財運、領導力與目標執行力，適合追求成長與突破的人", synergy: "加乘雷厲風行的決策魄力與開拓氣勢，讓你敢於跨出舒適圈，在激烈的競爭市場中果斷搶佔先機。" },
+    crystalDisadvantage: { demand: "情緒穩定與身心神經放鬆", crystal: "茶晶（茶水晶）", benefit: "穩定情緒、減輕壓力與焦慮、增強踏實感，幫助在忙碌生活中保持平衡", remedy: "平息急躁與焦慮的情緒火氣，讓緊繃的神經系統深度放鬆，在沉著冷靜中穩健前行、行穩致遠。" }
   },
   "破軍": {
     trait: "不破不立、顛覆常規，具備強大逆境突圍與破壞式創新驅動力的破局者",
+    workStyle: "骨子裡帶有破局創新的基因，討厭墨守成規，擅長在市場轉型期打破舊體系、重新定義新規則。",
+    advantageText: "破壞式創新驅動力驚人，越挫越勇，最適合主持組織變革、全新產品線孵化或顛覆傳統商業模式的創新專案。",
+    mindsetStyle: "思維天馬行空、叛逆且具破壞力；不滿足於現狀，骨子裡渴望自我顛覆與新生，人生常經歷階段性的大洗牌。",
+    wealthMode: "先破後成與非線性突破。透過商業模式創新、切換新賽道或顛覆式產出累積身家，切忌短線跟風賭博，需注重現金流護城河。",
+    loveDynamic: "追求強烈、深刻且具有探索冒險感的關係；無法忍受麻木平庸的相處模式，感情容易有戲劇化的起伏與階段性轉變。",
     pros: ["敢於打碎既有框架、重新定義遊戲規則", "越挫越勇，具備頂級的逆境突圍生命力"],
     cons: ["精力消耗極快，行事風格容易走向極端", "人際與生活階段的起伏波動較大"],
     employeeJobs: "新創公司拓展先鋒、技術研發突破負責人、市場破局營運操盤手",
@@ -1829,18 +1772,8 @@ const STAR_KNOWLEDGE = {
     healthElement: "精力消耗過度、腎氣陰虧、熬夜疲勞",
     healthAdvice: "衝刺事業時體力透支快，過度熬夜容易耗損精氣神。務必給身體保留深度休眠時間，多吃原型滋補食材。",
     propertyTrait: "常有房屋翻新重整、或隨生涯階段頻繁置產換屋的現象。宜守穩一處自住房作為定心錨，切忌短期盲目炒作。",
-    crystalAdvantage: {
-      demand: "財運、事業與逆境突圍",
-      crystal: "黑金超七",
-      benefit: "提升整體運勢、事業發展、貴人運與個人氣場，兼具保護與能量增幅效果",
-      synergy: "完美匹配你敢於顛覆常規、大破大立的創新精神，提升全場氣勢並引來貴人保駕護航，讓大膽嘗試順利落地。"
-    },
-    crystalDisadvantage: {
-      demand: "淨化能量與空間氣場舒緩",
-      crystal: "石膏石（透石膏）",
-      benefit: "淨化空間與個人氣場、舒緩混亂感、提升環境能量品質",
-      remedy: "平撫動盪變革帶來的混亂感，清理身心累積的過載情緒，為人生重組與重新出發打下平穩安心的地基。"
-    }
+    crystalAdvantage: { demand: "財運、事業與逆境突圍", crystal: "黑金超七", benefit: "提升整體運勢、事業發展、貴人運與個人氣場，兼具保護與能量增幅效果", synergy: "完美匹配你敢於顛覆常規、大破大立的創新精神，提升全場氣勢並引來貴人保駕護航，讓大膽嘗試順利落地。" },
+    crystalDisadvantage: { demand: "淨化能量與空間氣場舒緩", crystal: "石膏石（透石膏）", benefit: "淨化空間與個人氣場、舒緩混亂感、提升環境能量品質", remedy: "平撫動盪變革帶來的混亂感，清理身心累積的過載情緒，為人生重組與重新出發打下平穩安心的地基。" }
   }
 };
 
@@ -1848,28 +1781,37 @@ const STAR_KNOWLEDGE = {
  * 本機紫微推理引擎：根據不同主題焦點產出深度特製報告
  */
 function runLocalInference(chart, topic) {
-  const mingP = chart.palaces[chart.posMing];
-  const guanLuP = chart.palaces[(chart.posMing + 8) % 12];
-  const caiBoP = chart.palaces[(chart.posMing + 4) % 12];
-  const qianYiP = chart.palaces[(chart.posMing + 6) % 12];
-  const fuQiP = chart.palaces[(chart.posMing + 2) % 12];
-  const jiEP = chart.palaces[(chart.posMing + 5) % 12];
-  const tianZhaiP = chart.palaces[(chart.posMing + 9) % 12];													
-  const shenP = chart.palaces[chart.posShen];
+  // ✅ 穩健獲取十二宮位（防止索引 offset 算錯）
+  const getPalace = (name) => chart.palaces.find(p => p.name === name) || chart.palaces[0];
 
-  // 尋找主星知識
+  const mingP = chart.palaces[chart.posMing];
+  const shenP = chart.palaces[chart.posShen];
+  const guanLuP = getPalace("官祿");
+  const caiBoP = getPalace("財帛");
+  const qianYiP = getPalace("遷移");
+  const fuQiP = getPalace("夫妻");
+  const jiEP = getPalace("疾厄");
+  const tianZhaiP = getPalace("田宅");
+  const fuDeP = getPalace("福德");
+
+  // 尋找主星知識庫
   const mingPrimary = mingP.majorStars[0] || qianYiP.majorStars[0] || "天機";
+  const qianYiPrimary = qianYiP.majorStars[0] || mingPrimary;
   const guanLuPrimary = guanLuP.majorStars[0] || mingPrimary;
   const caiBoPrimary = caiBoP.majorStars[0] || mingPrimary;
   const fuQiPrimary = fuQiP.majorStars[0] || "天相";
   const jiEPrimary = jiEP.majorStars[0] || mingPrimary;
   const tianZhaiPrimary = tianZhaiP.majorStars[0] || "天府";
+  const fuDePrimary = fuDeP.majorStars[0] || mingPrimary;
+
   const kMing = STAR_KNOWLEDGE[mingPrimary] || STAR_KNOWLEDGE["天機"];
+  const kQianYi = STAR_KNOWLEDGE[qianYiPrimary] || kMing;
   const kGuan = STAR_KNOWLEDGE[guanLuPrimary] || kMing;
   const kCai = STAR_KNOWLEDGE[caiBoPrimary] || kMing;
   const kFu = STAR_KNOWLEDGE[fuQiPrimary] || STAR_KNOWLEDGE["天相"];
   const kJiE = STAR_KNOWLEDGE[jiEPrimary] || kMing;
   const kTZ = STAR_KNOWLEDGE[tianZhaiPrimary] || STAR_KNOWLEDGE["天府"];
+  const kFuDe = STAR_KNOWLEDGE[fuDePrimary] || kMing;
   
   // 取得四化落入宮位
   const sihuaPalaces = {};
@@ -1886,85 +1828,273 @@ function runLocalInference(chart, topic) {
   const keInfo = sihuaPalaces["科"] || { star: "主星", palace: "交會", branch: "" };
   const jiInfo = sihuaPalaces["忌"] || { star: "主星", palace: "磨練宮", branch: "" };
 
-  // 1. 個人特質與優勢定位
+  // ==========================================
+  // 1. 個人特質與底層思維解析（多宮位立體優化版）
+  // ==========================================
   if (topic === "overview") {
-    const crystalAdv = kMing.crystalAdvantage || {
-      demand: "財運、事業與領導統籌",
-      crystal: "鈦晶",
-      benefit: "強化事業運、財運、領導力與目標執行力，適合追求成長與突破的人",
-      synergy: "能進一步放大你的宏觀思維與決策氣場，拉滿貴人運勢與開拓能量。"
-    };
-    const crystalDisadv = kMing.crystalDisadvantage || {
-      demand: "情緒穩定與睡眠放鬆",
-      crystal: "月光石",
-      benefit: "穩定情緒、促進內在平衡、提升女性魅力與溫柔能量",
-      remedy: "化解過度緊繃的自尊與內在包袱，幫助釋放深層焦慮，改善高壓帶來的身心內耗。"
-    };
+    const isMingEmpty = mingP.majorStars.length === 0;
+    let palaceIntro = "";
+    let actualMingStar = "";
+
+    if (isMingEmpty) {
+      const borrowedStars = qianYiP.majorStars.length > 0 ? qianYiP.majorStars.join("、") : "無主要曜星";
+      actualMingStar = qianYiP.majorStars[0] || "天機";
+      palaceIntro = `你的命盤核心坐落於 **${mingP.stem}${mingP.branch}宮**，本宮無十四正曜坐守（呈「空宮」結構），五行局屬於 **${chart.meta.bureau}**（${chart.meta.gender}）。\n` +
+                    `命理上代表你天生自帶高度的環境適應彈性與共情力，善於順應外在人事、隨方就圓；在推演上借對宮遷移宮之 **[${borrowedStars}]** 照入，意味著你的個人氣場與性格厚度深受外在歷練、遠方機遇與社交互動的雕琢，外在舞台有多大，你的內在潛能就有多廣。`;
+    } else {
+      actualMingStar = mingP.majorStars[0];
+      palaceIntro = `你的命盤核心坐落於 **${mingP.stem}${mingP.branch}宮**，由主星 **[${mingP.majorStars.join("、")}]** 坐守，五行局屬於 **${chart.meta.bureau}**（${chart.meta.gender}）。`;
+    }
+
+    const kActualMing = STAR_KNOWLEDGE[actualMingStar] || STAR_KNOWLEDGE["天機"];
+
+    // 內在人設與社交面具對比
+    let personaContrast = "";
+    if (isMingEmpty) {
+      personaContrast = `因命宮無主星，你在獨處時容易感知到內心的「留白」與思緒流轉；而在外界社交環境中，則會鮮明展現出借星 **${actualMingStar}** 的特質（${kActualMing.trait}），能敏銳地依據不同場合切換最得體的角色。`;
+    } else if (actualMingStar === qianYiPrimary) {
+      personaContrast = `內外一致型人格。你展現在大眾面前的形象與私底下的真實自性高度吻合，真誠坦蕩、不喜刻意迎合造作。`;
+    } else {
+      personaContrast = `雙重維度立體人格。私下獨處時，你深受 **${actualMingStar}** 影響（${kActualMing.mindsetStyle}）；但在外在社交與職場人設上，對宮 **${qianYiPrimary}** 則賦予你「${kQianYi.trait}」的公眾氣場，形成了細膩立體的情商保護層。`;
+    }
+
+    // 福德宮深層心靈呼應
+    const fuDeInsight = `潛意識精神世界（福德宮）坐落於 **${fuDeP.stem}${fuDeP.branch}**（${fuDeP.majorStars.join("、") || "對宮借星"}），這意味著你的內在安全感與精神愉悅度，源自於「${kFuDe.mindsetStyle}」。`;
+
+    // 身宮下半場定錨
+    let shenDetails = "";
+    if (shenP.name === "命宮") shenDetails = "命身同宮，主觀意志強烈，凡事靠自己打拼，人生每一步都深深烙印著自我選擇的痕跡。";
+    else if (shenP.name === "遷移") shenDetails = "身在遷移，外出運旺盛，人生後半場越走動、越向外拓展或接觸多元環境，格局越大。";
+    else if (shenP.name === "官祿") shenDetails = "身在事業，天生追求成就感，三十歲後事業表現將是衡量人生滿意度的核心重心。";
+    else if (shenP.name === "財帛") shenDetails = "身在財帛，務實清醒，重視金錢掌控權與實質資產累積帶來的踏實感。";
+    else if (shenP.name === "福德") shenDetails = "身在福德，極度追求心靈自由與精神品味，後半生更願意把時間投資在讓自己愉悅舒適的事物上。";
+    else if (shenP.name === "夫妻") shenDetails = "身在夫妻，重視家庭與伴侶連結，親密關係的品質對你後半生的人格成熟度有著決定性影響。";
+
+    // 命宮輔煞星實質審查
+    let traitMinors = [];
+    if (mingP.minorStars.includes("左輔") || mingP.minorStars.includes("右弼")) traitMinors.push("匯聚 **輔弼吉星**：為人重情重義、處事圓融包容，人際網絡常能化敵為友。");
+    if (mingP.minorStars.includes("文昌") || mingP.minorStars.includes("文曲")) traitMinors.push("坐守 **昌曲才藝星**：思維敏捷、具備審美品味與良好文字表達力，散發書卷儒雅氣息。");
+    if (mingP.minorStars.includes("天魁") || mingP.minorStars.includes("天鉞")) traitMinors.push("交會 **魁鉞貴人**：自帶正氣與長輩緣，遇到重大難題時往往有貴人暗中相助。");
+    if (mingP.shaStars.includes("擎羊")) traitMinors.push("逢 **擎羊煞星**：行事剛毅果決、具破局開創之氣魄，但有時性子急烈、言語較為剛硬直接。");
+    if (mingP.shaStars.includes("陀羅")) traitMinors.push("逢 **陀羅煞星**：思維深沉有韌性，擅長反覆琢磨推敲；但遇到挫折時容易在心裡鑽牛角尖。");
+    if (mingP.shaStars.includes("火星") || mingP.shaStars.includes("鈴星")) traitMinors.push("逢 **火星 / 鈴星**：反應敏銳、爆發力強，情緒來得快去得快，需注意避免一時衝動。");
+    if (mingP.shaStars.includes("地空") || mingP.shaStars.includes("地劫")) traitMinors.push("逢 **空劫星曜**：思想跳脫傳統框架，自帶哲學悟性與獨特視角，不喜隨波逐流。");
+
+    const traitMinorText = traitMinors.length > 0 
+      ? traitMinors.map(m => `  - ${m}`).join("\n")
+      : "  - 命宮三方星象配置中正平穩，無極端偏倚，能穩定展現核心主星的本色。";
+
+    const crystalAdv = kActualMing.crystalAdvantage;
+    const crystalDisadv = kActualMing.crystalDisadvantage;
 
     return `
 ### 個人特質與底層思維解析
-你的命盤核心坐落於 **${mingP.stem}${mingP.branch}宮**，由 **${mingP.majorStars.join("、") || "對宮星曜借力"}** 坐守，五行局屬於 **${chart.meta.bureau}**（${chart.meta.gender}）。
-- **底層核心特質**：${kMing.trait}。思考維度深遠，自帶沉穩的底盤力量。
-- **30歲後的人生第二曲線**：身宮坐落於 **${shenP.name}** (${shenP.stem}${shenP.branch})，意味著進入人生下半場，你的自我實踐重心與行事風格，將會更聚焦在「${shenP.name}」所主導的領域。
+${palaceIntro}
+- **底層核心心智模型**：${kActualMing.mindsetStyle}
+- **內在人設與社交面具**：${personaContrast}
+- **潛意識精神世界**：${fuDeInsight}
+- **30歲後的人生第二曲線**：身宮坐落於 **${shenP.name}**（${shenP.stem}${shenP.branch}），${shenDetails}
 
 #### 核心天賦優勢與盲點檢視
 - **原生天賦優勢**：
-  - ${kMing.pros[0]}
-  - ${kMing.pros[1]}
-  - 三方四正交會吉星 [${[...mingP.minorStars, ...qianYiP.minorStars].join("、") || "基本配置"}]，為你注入靈活應變的處事彈性與貴人好運。
+  - ${kActualMing.pros[0]}
+  - ${kActualMing.pros[1]}
+- **宮位星曜加持效應**：
+${traitMinorText}
 - **需要留意的盲點（升級功課）**：
-  - ${kMing.cons[0]}
-  - ${kMing.cons[1]}
-  - 遇到煞星 [${[...mingP.shaStars, ...qianYiP.shaStars].join("、") || "考驗之星"}] 引動時，要特別留意在高壓下容易產生情緒化或衝動決策。
+  - ${kActualMing.cons[0]}，在高壓情境下容易演變成「${kActualMing.cons[1]}」。
 
 #### 現代生活需求評估與專屬水晶賦能
-根據現代生活與職場最常面臨的挑戰，結合你的命盤特質，精準定位「優勢加乘」與「盲點調和」能量指引：
-1. **天賦優勢倍增（原生長板強化，藉水晶能量加倍放大）**
+1. **天賦優勢倍增（原生長板強化）**
    - **核心聚焦需求**：**【${crystalAdv.demand}】**
-   - **天賦優勢解析**：${kMing.pros[0]}，具備得天獨厚的發揮空間與抗壓韌性，這是你最不易被外在逆境動搖的核心基本盤。
+   - **天賦優勢解析**：${kActualMing.pros[0]}，這是你最不易被外在逆境動搖的核心基本盤。
    - **專屬推薦水晶**：**${crystalAdv.crystal}**
-   - **水晶核心功效**：${crystalAdv.benefit}。
    - **能量加乘效果**：${crystalAdv.synergy}
-2. **盲點短板調和（能量平衡守護，藉水晶舒緩內耗緊繃）**
+2. **盲點短板調和（能量平衡守護）**
    - **核心平衡需求**：**【${crystalDisadv.demand}】**
-   - **盲點痛點解析**：${kMing.cons[0]}，在緊湊高壓的生活節奏中容易演變成「${kMing.cons[1]}」，是日常最需要主動給予自我關照的罩門。
+   - **盲點痛點解析**：${kActualMing.cons[0]}，是日常最需要主動給予自我關照的罩門。
    - **專屬推薦水晶**：**${crystalDisadv.crystal}**
-   - **水晶核心功效**：${crystalDisadv.benefit}。
    - **能量修復效果**：${crystalDisadv.remedy}
 
 > **專屬升級策略**：人生的勝率不在於追求面面俱到，而在於「極大化個人長板、守護好情緒短板」。善用原生天賦結合「${crystalAdv.crystal}」的頻率放大戰果，同時配戴「${crystalDisadv.crystal}」撫平情緒內耗，剛柔並濟，自然能走出屬於你的理想節奏。
     `.trim();
   }
 									  
-  // 2. 事業定位與職場競爭力
+// 2. 事業定位與職場競爭力（多宮位聯動深度版）
   if (topic === "career") {
+    const isGuanLuEmpty = guanLuP.majorStars.length === 0;
+    let palaceIntro = "";
+    let actualGuanStar = "";
+
+    if (isGuanLuEmpty) {
+      const borrowedStars = fuQiP.majorStars.length > 0 ? fuQiP.majorStars.join("、") : "無主要曜星";
+      actualGuanStar = fuQiP.majorStars[0] || mingPrimary;
+      palaceIntro = `事業宮（官祿宮）無主星坐守（呈「空宮」結構）。\n` +
+                    `命理上代表你對職涯賽道沒有狹隘的既定框架，具備極強的跨界學習與動態轉型彈性；在推演上借對宮夫妻宮之 **[${borrowedStars}]** 照入，意味著你的事業發展與生活情感狀態、重要合作夥伴有著深層的聯動關係，和諧穩定的後盾是你在職場上大展身手的關鍵基石。`;
+    } else {
+      actualGuanStar = guanLuP.majorStars[0];
+      palaceIntro = `事業宮（官祿宮）由主星 **[${guanLuP.majorStars.join("、")}]** 坐鎮。`;
+    }
+
+    const kActualGuan = STAR_KNOWLEDGE[actualGuanStar] || kMing;
+    const guanLuWorkStyle = kActualGuan.workStyle || "在工作上重視自身的專業價值積累，追求能展現實質能力的空間。";
+    const guanLuAdvantage = kActualGuan.advantageText || "在組織中善於發揮專業技術，用扎實穩健的表現建立個人口碑。";
+
+    // 命宮與事業宮的相互呼應
+    let mingGuanSynergy = "";
+    if (mingPrimary === actualGuanStar) {
+      mingGuanSynergy = `命業星曜同質共振，展現「知行合一」的職場氣質，做自己真正感興趣的事最能激發極致專注力與產出。`;
+    } else {
+      mingGuanSynergy = `命宮特質賦予你「${kMing.trait}」的底層思維，在實務執行上則透過 **${actualGuanStar}** 的作風具體落地，兼具戰略視野與專業執行力。`;
+    }
+
+    // 身宮加持分析
+    let shenInsight = "";
+    if (shenP.branchIndex === guanLuP.branchIndex) {
+      shenInsight = `值得注意的是，你的**「身宮」正坐落在事業宮**，這是典型的「事業成就驅動型」格局。三十歲後，工作上的成就感與自我突破，將成為你衡量自我價值最核心的指標，在職場中具備極強的後勁與耐力。`;
+    } else {
+      shenInsight = `你的**身宮坐落於【${shenP.name}】**，代表在追求職涯晉升的同時，你潛意識中也十分看重「${shenP.name}」所象徵的生活面向（如身心平衡或財富自主），追求的是工作與生活整體的正向循環。`;
+    }
+
+    // 官祿宮吉煞星與輔曜深度審查
+    const careerMinors = guanLuP.minorStars;
+    const careerShas = guanLuP.shaStars;
+    let starEffects = [];
+
+    if (careerMinors.includes("文昌") || careerMinors.includes("文曲")) {
+      starEffects.push("會合 **昌曲文星**：利於專業證照取得、文字企劃、政策法規與文書公信力，靠專門知識或專業文憑升遷。");
+    }
+    if (careerMinors.includes("左輔") || careerMinors.includes("右弼")) {
+      starEffects.push("會合 **輔弼貴人**：具備天然的管理與統籌協調天賦，在組織中容易得到平輩或跨部門夥伴的實質助力，適合帶領專案團隊。");
+    }
+    if (careerMinors.includes("天魁") || careerMinors.includes("天鉞")) {
+      starEffects.push("會合 **魁鉞貴人**：自帶長輩提攜與長官貴人運，常能在職場關鍵晉升或轉型時刻，獲得體制內實力派人士的指點與背書。");
+    }
+    if (careerMinors.includes("祿存")) {
+      starEffects.push("會合 **祿存吉星**：在體制內享有穩定的薪酬與待遇保障，求職運平穩，宜走穩健防守、逐級升遷的長線路線。");
+    }
+
+    if (careerShas.includes("擎羊")) {
+      starEffects.push("坐守 **擎羊煞星**：具備強大衝勁與敢打硬仗的魄力，適合開拓新業務或接手高難度棘手專案；但需注意職場說話易過於剛直，應防範與平輩同事的正面摩擦。");
+    }
+    if (careerShas.includes("陀羅")) {
+      starEffects.push("坐守 **陀羅煞星**：具備極強的鑽研精神與耐磨韌性，適合攻克長週期技術瓶頸；但也容易在進度遇到挫折時陷入原地打轉或拖延，需設定明確的停損與階段交付節奏。");
+    }
+    if (careerShas.includes("火星") || careerShas.includes("鈴星")) {
+      starEffects.push("會合 **火星 / 鈴星**：工作節奏快、爆發力極強，適合應對快節奏、講求即戰力與突發性的任務；但需防衝動決策或耐性不足導致的三分鐘熱度。");
+    }
+    if (careerShas.includes("地空") || careerShas.includes("地劫")) {
+      starEffects.push("會合 **空劫星曜**：思維跳脫框架，富含獨特創意，適合走數位科技、線上電商、設計藝術或非典型賽道；但較不適應僵化死板的官僚階級制度。");
+    }
+
+    const starEffectText = starEffects.length > 0 
+      ? starEffects.map(item => `  - ${item}`).join("\n")
+      : "  - 官祿宮無明顯特殊輔煞星曜干擾，整體職場行運相對穩定，全憑主星實力穩健發揮。";
+
+    // 四化對事業的直接引動
+    let sihuaCareerNote = "";
+    if (chart.meta.sihua[actualGuanStar] === "祿") {
+      sihuaCareerNote = `✦ **生年化祿引動**：你在工作上機會極多、人緣順遂，工作本身就能帶給你充沛的成就感與資源回饋，適合多方拓展業務版圖。`;
+    } else if (chart.meta.sihua[actualGuanStar] === "權") {
+      sihuaCareerNote = `✦ **生年化權引動**：天生具備強烈的掌權慾與專業爭勝心，在職場中必定會爭取主導地位與拍板權，是天生的核心決策戰將。`;
+    } else if (chart.meta.sihua[actualGuanStar] === "科") {
+      sihuaCareerNote = `✦ **生年化科引動**：工作走聲譽與口碑路線，容易在業界或機構內樹立清廉、客觀、高專業度的公信形象，利於名聲傳播與考評升遷。`;
+    } else if (chart.meta.sihua[actualGuanStar] === "忌") {
+      sihuaCareerNote = `✦ **生年化忌引動**：典型的「工作責任感極重」之象。常為工作操心勞神、凡事親力親為，早期較辛苦多波折；但只要經過深度打磨深耕，後期將成為無人能取代的專業權威。`;
+    } else {
+      sihuaCareerNote = `✦ **生年四化支撐**：生年「化權」落在 **【${quanInfo.palace}】(${quanInfo.star})**，這是你爭取職場話語權與主控權的核心支點；善用該領域的優勢，能為你的事業推展帶來關鍵助力。`;
+    }
+
     return `
 ### 事業定位與職場競爭力
-事業宮（官祿宮）坐落於 **${guanLuP.stem}${guanLuP.branch}宮**，由 **${guanLuP.majorStars.join("、") || "對宮借星"}** 坐鎮，匯聚吉星 [${guanLuP.minorStars.join("、") || "基本配置"}]。
-這個結構顯示你在工作上極度重視「專業門檻」與「長期成長性」，不甘於被困在低成就感的重複性事務中。
+${palaceIntro}
+- **核心工作作風**：${guanLuWorkStyle}
+- **命盤格局聯動**：${mingGuanSynergy}
+- **下半場重心推演**：${shenInsight}
 
 #### 雙軌職涯適配賽道
-針對你的特質，以下提供兩條具備成長潛力的發展路線：
-1. **組織體制內的專業晉升（企業/機構路徑）**：
-   - **適配職能角色**：**${kGuan.employeeJobs}**
-   - **職場競爭優勢**：在制度完整、需跨部門協作的環境中，最適合擔任規劃、風控、審核或專案管理等樞紐角色，用穩定、高專業度的表現建立個人不可替代性。
-2. **自由工作者 / 個人品牌（獨立商業模式）**：
-   - **適配創業賽道**：**${kGuan.freelanceJobs}**
-   - **價值變現途徑**：發揮獨立思考與深度鑽研的能力，透過專業諮詢、技術接案、線上課程或自媒體內容輸出，打造個人的專業影響力護城河。
+針對你的整體星曜格局，提供兩條高度適配的發展方向：
+1. **組織體制內的專業晉升（企業／機構路徑）**：
+   - **適配職能角色**：**${kActualGuan.employeeJobs}**
+   - **職場競爭優勢**：${guanLuAdvantage}
+2. **自由工作者／個人品牌（獨立商業模式）**：
+   - **適配創業賽道**：**${kActualGuan.freelanceJobs}**
+   - **價值變現途徑**：發揮你在【${caiBoP.majorStars.join("、") || "財帛宮"}】所主導的進財思維，把專業技術或獨特經驗產品化，建立個人的專屬市場利基。
 
-#### 職場突破與避坑指南
-- **職涯槓桿點**：生年「化權」落在 **${quanInfo.palace}** (${quanInfo.star})，這是你在工作環境中爭取話語權與決策主控權的支點，要敢於在此領域爭取重要專案的主導權。
-- **職場防內耗提示**：若事業宮有煞星同宮或照會，需注意遠離無效的辦公室政治與人際是非，堅持用具體成果、數據與客觀事實建立信任。
+#### 職場實質能量配置與避坑指南
+${sihuaCareerNote}
+- **宮位星曜配置特徵**：
+${starEffectText}
+
+> **事業晉升關鍵**：清楚自己的發力支點，不盲目追求主流標準。在對的賽道深耕天賦長板，搭配適當的溝通與防禦策略，自然能建立堅固的職場護城河。
     `.trim();
   }
 
   // 3. 財富管道與資產佈局
   if (topic === "wealth") {
+    const isCaiBoEmpty = caiBoP.majorStars.length === 0;
+    let palaceIntro = "";
+    let actualCaiStar = "";
+
+    if (isCaiBoEmpty) {
+      const borrowedStars = fuDeP.majorStars.length > 0 ? fuDeP.majorStars.join("、") : "無主要曜星";
+      actualCaiStar = fuDeP.majorStars[0] || mingPrimary;
+      palaceIntro = `財富宮（財帛宮）無主星坐守（呈「空宮」結構）。\n` +
+                    `這代表你在財務變現上較不拘泥於單一常規途徑，對金錢本身較無過度執拗的束縛；推演上借對宮福德宮之 **[${borrowedStars}]** 照入，意味著你的「財氣」與個人的精神愉悅度、心理認知高度密不可分——當你的內在心態放鬆富足、認知提升時，財路往往自然開闊；若陷入焦慮煩躁，現金流也容易隨之劇烈起伏。`;
+    } else {
+      actualCaiStar = caiBoP.majorStars[0];
+      palaceIntro = `財富宮（財帛宮）由主星 **[${caiBoP.majorStars.join("、")}]** 坐守，代表你的現金流模式、獲利途徑與個人財商風格。`;
+    }
+
+    const kActualCai = STAR_KNOWLEDGE[actualCaiStar] || kMing;
+    const caiBoWorkStyle = kActualCai.wealthMode || "靠專業積累與穩定經營逐步擴大收益。";
+
+    // 財帛宮（水龍頭）× 田宅宮（蓄水池）聯動診斷
+    let reservoirAnalysis = "";
+    const tzMajor = tianZhaiP.majorStars;
+    if (tzMajor.includes("天府") || tzMajor.includes("太陰") || tzMajor.includes("武曲")) {
+      reservoirAnalysis = `田宅宮坐守 **[${tzMajor.join("、")}]** 庫存吉星，代表你的「蓄水池」極深。即便市場波動，你天生具備極強的守財與聚財意識，最適合把現金流沉澱為房產、不動產或保值硬資產。`;
+    } else if (tianZhaiP.shaStars.includes("地空") || tianZhaiP.shaStars.includes("地劫")) {
+      reservoirAnalysis = `田宅宮逢 **地空 / 地劫**，代表「蓄水池偶有裂縫」，容易因為家人開銷、房屋修繕或意外投資造成資金漏斗；資產配置宜採用專款專用的強迫儲蓄機制。`;
+    } else {
+      reservoirAnalysis = `田宅宮坐落於 **${tianZhaiP.stem}${tianZhaiP.branch}**（${tzMajor.join("、") || "一般配置"}），財庫中正平穩；關鍵在於落實開源與節流的平衡，避免過度寬鬆的非必要支出。`;
+    }
+
+    // 財帛宮吉煞星實質審查
+    let wealthMinors = [];
+    if (caiBoP.minorStars.includes("祿存")) wealthMinors.push("坐守 **祿存正財星**：現金流穩定厚實，重視財務安全防線，擅長細水長流儲蓄，天生財源不斷。");
+    if (caiBoP.minorStars.includes("天馬")) wealthMinors.push("會合 **天馬動星**：動中生財、出外得利之象，適合跨境業務、電商、差旅商務或跨區域流動資金佈局。");
+    if (caiBoP.majorStars.includes("貪狼") && (caiBoP.shaStars.includes("火星") || caiBoP.shaStars.includes("鈴星"))) {
+      wealthMinors.push("形成 **火貪 / 鈴貪格**：暗藏突破性的偏財運勢，具備在市場週期紅利中爆發性獲利的潛力，但切忌貪戀最後一棒。");
+    }
+    if (caiBoP.shaStars.includes("擎羊")) wealthMinors.push("坐守 **擎羊煞星**：敢於冒險搶佔市場，求財具魄力與狠勁；但需嚴防短線高槓桿造成的資金急跌風險。");
+    if (caiBoP.shaStars.includes("陀羅")) wealthMinors.push("坐守 **陀羅煞星**：資金周轉偶有延遲或拖延卡頓之象，商業往來務必白紙黑字明確付款週期。");
+    if (caiBoP.shaStars.includes("地空") || caiBoP.shaStars.includes("地劫")) wealthMinors.push("坐守 **空劫星曜**：現金流起伏較劇，非傳統進財模式；極適合依靠概念、數位創意或無形知識變現，但嚴禁跟風炒作。");
+
+    const wealthMinorText = wealthMinors.length > 0 
+      ? wealthMinors.map(m => `  - ${m}`).join("\n")
+      : "  - 財帛宮無特殊輔煞極端擾動，進財管道正統規律，收益多寡取決於本職專業技能的深淺。";
+
+    // 財帛宮四化動態
+    let sihuaWealthNote = "";
+    if (chart.meta.sihua[actualCaiStar] === "祿") {
+      sihuaWealthNote = `✦ **生年化祿入財帛**：現金流極旺，自帶賺錢嗅覺與進財機遇，多能輕鬆享有豐厚收益。`;
+    } else if (chart.meta.sihua[actualCaiStar] === "權") {
+      sihuaWealthNote = `✦ **生年化權入財帛**：對金錢有強烈掌控欲與企圖心，善於靠專業硬實力開拓多元收入來源。`;
+    } else if (chart.meta.sihua[actualCaiStar] === "科") {
+      sihuaWealthNote = `✦ **生年化科入財帛**：求財講究信譽與口碑，適合靠專業名聲、著作或公信力穩定生財。`;
+    } else if (chart.meta.sihua[actualCaiStar] === "忌") {
+      sihuaWealthNote = `✦ **生年化忌入財帛**：對財務常懷危機意識、為錢操心勞碌；早期宜守不宜攻，待專業深耕後才能守穩財富。`;
+    }
+
     return `
 ### 財富引擎與個人資產配置
-財富宮（財帛宮）坐落於 **${caiBoP.stem}${caiBoP.branch}宮**，由 **${caiBoP.majorStars.join("、") || "對宮星曜借力"}** 坐守，代表你的現金流模式、獲利途徑與個人財商風格。
-- **核心進財特質**：${kCai.wealth}。
-- **變現模式定位**：你的財富大多來自專業知識、策略思考或系統化管理帶來的價值溢價，並非單靠時間體力硬拼。
+${palaceIntro}
+- **核心進財思維**：${caiBoWorkStyle}
+- **財庫蓄水實力（財帛 × 田宅診斷）**：${reservoirAnalysis}
+
+#### 財帛宮星曜配置與現金流特徵
+${sihuaWealthNote ? `${sihuaWealthNote}\n` : ""}${wealthMinorText}
 
 #### 四化動態：財富機遇與風控防線
 - **財富紅利區（化祿所在）**：生年「化祿」坐落在 **【${luInfo.palace}】(${luInfo.star})**。這是你命盤中資源最豐沛的天然優勢區，多連結這個宮位所代表的人脈、業務或領域，最容易迎來事半功倍的獲利契機。
@@ -1978,17 +2108,94 @@ function runLocalInference(chart, topic) {
 
   // 4. 親密關係與伴侶特質解析
   if (topic === "marriage") {
+    const isFuQiEmpty = fuQiP.majorStars.length === 0;
+    
+    // 1. 宮位坐星與空宮專屬敘述
+    let palaceIntro = "";
+    let fuQiPrimaryStar = "";
+
+    if (isFuQiEmpty) {
+      // 空宮借對宮（官祿宮）星曜推演
+      const borrowedStars = guanLuP.majorStars.length > 0 ? guanLuP.majorStars.join("、") : "無主星";
+      fuQiPrimaryStar = guanLuP.majorStars[0] || "天相";
+      
+      palaceIntro = `感情宮（夫妻宮）無主星坐守（呈「空宮」結構）。\n` +
+                    `命理上代表你在擇偶時更看重彼此相處的默契與感覺，標準彈性較大；在推演上需借對宮官祿宮之 **[${borrowedStars}]** 照入，這也意味著你的感情運勢與伴侶樣貌，深受彼此工作狀態與生活節奏的強烈牽引。`;
+    } else {
+      fuQiPrimaryStar = fuQiP.majorStars[0];
+      palaceIntro = `感情宮（夫妻宮）由主星 **[${fuQiP.majorStars.join("、")}]** 坐鎮。`;
+    }
+
+    const kFuActual = STAR_KNOWLEDGE[fuQiPrimaryStar] || STAR_KNOWLEDGE["天相"];
+    const fuQiLoveDynamic = kFuActual.loveDynamic || "在關係中重視實質陪伴與彼此相互尊重。";
+
+    // 2. 夫妻 × 事業（夫官線）× 福德（氣數位）實質動態分析（取代原固定句子）
+    let dynamicCrossAnalysis = "";
+    
+    // 檢查夫官線（事業宮的煞忌是否干擾感情）
+    const hasCareerSha = guanLuP.shaStars.length > 0 || chart.meta.sihua[guanLuPrimary] === "忌";
+    let careerEcho = "";
+    if (hasCareerSha) {
+      careerEcho = `對宮事業宮逢煞忌擾動，容易出現「工作壓力外溢至感情相處」的情況，衝刺職涯時需多留意避免將職場的焦慮情緒帶給伴侶。`;
+    } else {
+      careerEcho = `夫官線結構穩定，伴侶與你在人生追求上有極高的協同性，能在生活與事業上相互扶持、成為彼此最踏實的軍師。`;
+    }
+
+    // 檢查福德宮（心靈幸福感與情緒消化力）
+    let fuDeEcho = "";
+    if (fuDeP.shaStars.length > 0 || chart.meta.sihua[fuDePrimary] === "忌") {
+      fuDeEcho = `同時，作為婚姻氣數位的福德宮有煞星引動，顯示你在親密關係中潛意識容易想得過深、對微小細節較為敏感，需學會主動釋放情緒包袱、放下過度揣測。`;
+    } else {
+      fuDeEcho = `婚姻氣數位（福德宮）溫厚安穩，代表你擁有良好的包容力與轉念智慧，能為感情生活注入溫暖平靜的相處定力。`;
+    }
+
+    dynamicCrossAnalysis = `${careerEcho} ${fuDeEcho}`;
+
+    // 3. 夫妻宮吉煞星實質審查
+    let loveMinors = [];
+    if (fuQiP.minorStars.includes("文昌") || fuQiP.minorStars.includes("文曲")) {
+      loveMinors.push("會合 **昌曲文星**：伴侶多具備文藝氣質、談吐幽默優雅，兩人注重生活情調與浪漫儀式感；但需注意感情多情敏感之象。");
+    }
+    if (fuQiP.minorStars.includes("左輔") || fuQiP.minorStars.includes("右弼")) {
+      loveMinors.push("會合 **輔弼貴人**：另一半在人生與事業上常是你的重要得力助手；相處時需互相給予界線，避免親友過度干涉兩人世界。");
+    }
+    if (fuQiP.minorStars.includes("天魁") || fuQiP.minorStars.includes("天鉞")) {
+      loveMinors.push("會合 **魁鉞貴人**：伴侶自帶端莊貴氣，彼此常是長輩引薦或在正式社交場合結緣，伴侶在關鍵時刻能為你帶來實質提攜。");
+    }
+    if (fuQiP.shaStars.includes("擎羊")) {
+      loveMinors.push("坐守 **擎羊煞星**：兩人性格皆具主見，相處容易在生活主導權上言語爭鋒；溝通切忌用命令或挑釁口吻，需學會彼此各退一步。");
+    }
+    if (fuQiP.shaStars.includes("陀羅")) {
+      loveMinors.push("坐守 **陀羅煞星**：感情節奏較為慢熱，遇到矛盾容易冷戰或心結難解；有意見務必當日溝通開解，避免將心事悶在心裡發酵。");
+    }
+    if (fuQiP.shaStars.includes("火星") || fuQiP.shaStars.includes("鈴星")) {
+      loveMinors.push("會合 **火星 / 鈴星**：感情來得熱烈濃郁、進展迅速；但磨合期脾氣較急，需注意情緒管理，避免在氣頭上做出過激決定。");
+    }
+    if (fuQiP.shaStars.includes("地空") || fuQiP.shaStars.includes("地劫")) {
+      loveMinors.push("會合 **空劫星曜**：相處模式非典型，重視靈魂精神交流；適當的「聚少離多」或保有彼此獨立的事業與社交空間，反而更有利於長久保鮮。");
+    }
+
+    const loveMinorText = loveMinors.length > 0 
+      ? loveMinors.map(m => `  - ${m}`).join("\n")
+      : "  - 夫妻宮無明顯輔煞極端擾動，感情相處平實自然，回歸主星所賦予的互動基調。";
+
+    // 4. 夫妻宮四化動態
+    let sihuaLoveNote = "";
+    if (chart.meta.sihua[fuQiPrimaryStar] === "祿") sihuaLoveNote = "✦ **生年化祿引動**：你對伴侶極度慷慨體貼、情深意重，容易享受到感情帶來的滋潤與福報。";
+    else if (chart.meta.sihua[fuQiPrimaryStar] === "權") sihuaLoveNote = "✦ **生年化權引動**：伴侶個性強勢幹練、主導欲較強，家庭分工宜明確界定，多給予對方決策尊嚴。";
+    else if (chart.meta.sihua[fuQiPrimaryStar] === "科") sihuaLoveNote = "✦ **生年化科引動**：兩人相敬如賓、相濡以沫，伴侶斯文有禮、注重家庭名譽與相處風度。";
+    else if (chart.meta.sihua[fuQiPrimaryStar] === "忌") sihuaLoveNote = "✦ **生年化忌引動**：宿世情緣、相欠債之象。早期感情容易波折、多操心或聚少離多，晚婚或各自擁有獨立事業更能化解摩擦。";
+
     return `
 ### 親密關係與伴侶特質解析
-感情宮（夫妻宮）位於 **${fuQiP.stem}${fuQiP.branch}宮**，由星曜 **${fuQiP.majorStars.join("、") || "對宮借星"}** 坐守，與事業宮、福德宮相互呼應。
-- **理想伴侶樣貌**：${kFu.love}。
-- **感情相處風格**：這顯示你在親密關係中既重視深刻的精神交流，也對伴侶的生活責任感與外在儀表有一定標準。
+${palaceIntro}
+- **理想伴侶特質**：${kFuActual.love}。
+- **核心相處互動風格**：${fuQiLoveDynamic}
+- **夫官線與心靈氣數位動態（事業 × 福德聯動）**：${dynamicCrossAnalysis}
 
-#### 關係中的亮點與潛在課題
-- **默契加分項**：若感情宮交會文星或吉曜，兩人相處往往聊得來、有心靈默契，能在彼此的職涯與人生路上成為最強軍師。
-- **需要留意的課題**：
-  - 若逢煞星或化忌牽引，容易在生活瑣事與家務責任的分工上產生溝通盲區，甚至出現情緒化的冷淡距離。
-  - 有時太過理性、就事論事，反而忽略了及時的情緒價值與浪漫反饋。
+#### 親密互動特徵與星曜影響
+${sihuaLoveNote ? `${sihuaLoveNote}\n` : ""}- **宮位星曜配置特徵**：
+${loveMinorText}
 
 > **親密關係經營心法**：健康長久的關係往往來自「降低預設立場、增加主動傾聽」。在日常中給彼此適當的喘息空間，多用正向回饋取代評價，感情自然能細水長流。
     `.trim();
@@ -1996,16 +2203,112 @@ function runLocalInference(chart, topic) {
 
   // 5. 十年大運節奏與關鍵轉折分析
   if (topic === "decadal") {
+    const STAGE_CONFIGS = [
+      { name: "啟蒙奠基期", focus: "心智啟蒙、身心性格塑型與原生家庭環境適應" },
+      { name: "求學探索期", focus: "求學歷練、知識技能打底與人際社群價值觀確立" },
+      { name: "立足拓荒期", focus: "步入職場、初探社會賽道、摸索個人立足支點與獨立自主" },
+      { name: "黃金衝刺期", focus: "職涯主戰場突破、關鍵專業晉升、承擔重任與確立事業版圖" },
+      { name: "成熟頂峰期", focus: "影響力擴張、資源整合、家庭財富壓艙石沉澱與攻守兼備" },
+      { name: "收穫統籌期", focus: "人生收穫覆盤、經驗傳承、資產傳續與追求內在從容自在" },
+      { name: "智慧傳承期", focus: "心靈精神昇華、人生智慧沈澱、享受天倫與從心所欲之境" }
+    ];
+
+    const PALACE_STAGE_THEMES = {
+      "命宮": "回歸自我本質，自我價值重塑與核心心智成熟的關鍵十年。",
+      "兄弟": "聚焦同儕手足、事業合夥與跨領域團隊協同合作，人脈資源流動頻繁。",
+      "夫妻": "親密關係磨合、婚姻責任確立，以及一對一深層信任與合作關係的建立。",
+      "子女": "聚焦才華創造力展現、新專案孵化、投資試水，或子女教養與世代培育。",
+      "財帛": "聚焦商業模式變現、資產滾動與現金流累積，實質財務防線的打造關鍵期。",
+      "疾厄": "身心健康維護、潛意識情緒排解與作息重塑，學會放慢腳步調理體質與內在。",
+      "遷移": "跨出原生舒適圈、向外開拓、出差差旅或遠方發展，機遇多來自開拓遠界。",
+      "交友": "擴大社會關係網、人脈階層流動與團隊組織管理，重在化被動為樞紐。",
+      "官祿": "事業衝刺、職場天花板突破與建立個人專業公信力、角逐行業話語權。",
+      "田宅": "置產成家、家庭根基穩固與財富蓄水池的沉澱，聚焦資產長期安全感。",
+      "福德": "追求心靈自由、精神生活品質提升與價值觀昇華，重在內在知足與心靈修養。",
+      "父母": "承接長輩前輩提攜、借力既有制度平台資源，處理公門體制與名譽法規事務。"
+    };
+
+    // 輔助函式：推演每個大運宮位的星曜指引
+    function getDecadalStarAdvice(p, oppP) {
+      let advice = "";
+      if (p.majorStars.length === 0) {
+        const oppStars = oppP.majorStars.length > 0 ? oppP.majorStars.join("、") : "無主星";
+        advice = `本宮無十四主星坐守，借對宮【${oppStars}】推演。此十年外在環境拉力顯著、生活變化多元，切忌隨波逐流，需有意識地主動自我定錨、順勢借力破局。`;
+      } else {
+        const primary = p.majorStars[0];
+        const starMap = {
+          "紫微": "由紫微星坐鎮，氣場恢弘、擔負核心決策與統籌重任，宜展現引領大局的魄力。",
+          "天機": "由天機星掌舵，思維活躍敏銳、面臨動態轉型與策略調整，重在化繁為簡、深思熟慮。",
+          "太陽": "由太陽星坐鎮，自帶公信力與熱情光芒，利於向外拓展影響力、樹立公眾形象。",
+          "武曲": "由武曲星坐守，求真務實、重視執行效率與實質財務回報，是扎實累積資本的攻堅期。",
+          "天同": "由天同星坐守，追求身心協調與生活品質，宜在融洽合作與細水長流中發揮柔性優勢。",
+          "廉貞": "由廉貞星坐鎮，企圖心與個人風格強烈，適合在高度競爭或複雜人際變局中出奇制勝。",
+          "天府": "由天府星坐鎮，穩重沉著、長於資產守成與全局調度，宜穩紮穩打、構築資產護城河。",
+          "太陰": "由太陰星坐守，心思細膩縝密、善於策劃與長線佈局，適宜深耕專業與沉澱資產。",
+          "貪狼": "由貪狼星坐鎮，好奇心與探索欲旺盛、跨界社交契機頻繁，宜聚焦核心賽道、避免精力分散。",
+          "巨門": "由巨門星坐守，考驗深入思辨、專業表達與風險把關，宜靠不可替代的硬核技術樹立話語權。",
+          "天相": "由天相星坐鎮，溝通協調得體、利於擔任高階幕僚或合作橋樑，以信譽口碑作為立身之本。",
+          "天梁": "由天梁星坐守，自帶長輩提攜與逢凶化吉之氣場，宜發揮前輩引導力，在成熟領域深耕。",
+          "七殺": "由七殺星坐鎮，節奏雷厲風行、面臨重大挑戰與環境轉折，敢打敢拚方能開創新局。",
+          "破軍": "由破軍星坐鎮，迎來打破常規、破舊立新的關鍵轉型期，先破後立、大膽擁抱人生新篇章。"
+        };
+        advice = starMap[primary] || `由 [${p.majorStars.join("、")}] 坐守，穩健發揮主星特質引領人生步伐。`;
+      }
+
+      // 檢查四化引動
+      let sihuaHits = [];
+      p.majorStars.forEach(s => {
+        if (chart.meta.sihua[s]) sihuaHits.push(`生年化${chart.meta.sihua[s]}（${s}）`);
+      });
+      if (sihuaHits.length > 0) {
+        advice += ` 同時逢 **${sihuaHits.join("、")}** 坐守，為這十年的成長軌跡注入關鍵爆發力。`;
+      }
+
+      // 檢查吉煞輔星
+      let minorHits = [];
+      if (p.minorStars.includes("左輔") || p.minorStars.includes("右弼")) minorHits.push("輔弼同度多夥伴臂助");
+      if (p.minorStars.includes("天魁") || p.minorStars.includes("天鉞")) minorHits.push("魁鉞引領得貴人指路");
+      if (p.minorStars.includes("祿存")) minorHits.push("祿存守照利於財富底盤穩固");
+      if (p.shaStars.includes("擎羊") || p.shaStars.includes("陀羅")) minorHits.push("羊陀牽動需防行事過急或暗中牽絆");
+      if (p.shaStars.includes("火星") || p.shaStars.includes("鈴星")) minorHits.push("火鈴催化需重脾氣控管與耐力修煉");
+      if (p.shaStars.includes("地空") || p.shaStars.includes("地劫")) minorHits.push("空劫相會利創新思維、需防財務無序波動");
+
+      if (minorHits.length > 0) {
+        advice += `（輔星助勢：${minorHits.join("、")}）`;
+      }
+      return advice;
+    }
+
+    // 動態生成 7 個十年大運節奏
+    const decadalStagesMarkdown = STAGE_CONFIGS.map((stage, k) => {
+      const targetBranch = chart.meta.isClockwiseLimit
+        ? (chart.posMing + k) % 12
+        : ((chart.posMing - k) % 12 + 12) % 12;
+      const pDecade = chart.palaces[targetBranch];
+      const oppBranch = (targetBranch + 6) % 12;
+      const pOpp = chart.palaces[oppBranch];
+
+      const startAge = chart.meta.bureauNum + k * 10;
+      const endAge = startAge + 9;
+      const palaceTheme = PALACE_STAGE_THEMES[pDecade.name] || "穩健推進該階段的生活重心與核心成長目標。";
+      const starAdvice = getDecadalStarAdvice(pDecade, pOpp);
+
+      return `${k + 1}. **【${stage.name}】${startAge} - ${endAge} 歲（行經本命${pDecade.name}・${pDecade.stem}${pDecade.branch}）**\n` +
+             `   - **人生階段重心**：${stage.focus}。\n` +
+             `   - **宮位環境課題**：重疊本命【${pDecade.name}】，${palaceTheme}\n` +
+             `   - **星曜指引與策略**：${starAdvice}`;
+    }).join("\n\n");
+
     return `
 ### 十年大運節奏與關鍵轉折分析
 你的命局為 **${chart.meta.bureau}**（大運起運年齡為 **${chart.meta.bureauNum} 歲**），大運順序為 **${chart.meta.isClockwiseLimit ? "順時針前進" : "逆時針前進"}**。
-- **人生階段節奏**：
-  - 求學奠基期（約 ${chart.meta.bureauNum} - ${chart.meta.bureauNum + 19} 歲）：著重在個人底層認知、學習力與核心性格的打磨。
-  - 黃金衝刺期（約 ${chart.meta.bureauNum + 20} - ${chart.meta.bureauNum + 39} 歲）：進入職涯與財富積累的關鍵主戰場，是確立個人專業定位與事業版圖的黃金十年。
+
+#### 完整大運週期人生節奏與關鍵破局點
+${decadalStagesMarkdown}
 
 #### 四化能量的轉折解鎖密碼
 生年四化是你人生腳本的動能開關：
-- **化祿 (${luInfo.star} 在 ${luInfo.palace})**：天賦機會與優質人脈的匯聚點；每當大運或流年走到這個宮位，通常是順勢擴張、大膽推進的最佳時機。
+- **化祿 (${luInfo.star} 在 ${luInfo.palace})**：天賦機會與優質人脈的匯聚點；每當大運走到這個宮位，通常是順勢擴張、大膽推進的最佳時機。
 - **化權 (${quanInfo.star} 在 ${quanInfo.palace})**：展現實力與掌握主導權的發力點，驅使你在該領域積極深耕、建立威信。
 - **化科 (${keInfo.star} 在 ${keInfo.palace})**：個人名譽、專業口碑與關鍵時刻貴人相助的安全氣囊。
 - **化忌 (${jiInfo.star} 在 ${jiInfo.palace})**：考驗集中與耐力升級的修煉場。化忌不是終點，而是提示你必須靠沉澱打磨與專業實力才能破局；一旦跨過，往往是人生成長幅度最大的轉折點。
