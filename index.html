@@ -1839,11 +1839,11 @@ function runLocalInference(chart, topic) {
     if (isMingEmpty) {
       const borrowedStars = qianYiP.majorStars.length > 0 ? qianYiP.majorStars.join("、") : "無主要曜星";
       actualMingStar = qianYiP.majorStars[0] || "天機";
-      palaceIntro = `你的命盤核心坐落於 **${mingP.stem}${mingP.branch}宮**，本宮無十四正曜坐守（呈「空宮」結構），五行局屬於 **${chart.meta.bureau}**（${chart.meta.gender}）。\n` +
+      palaceIntro = `你的命盤核心無主星坐守（呈「空宮」結構），五行局屬於 **${chart.meta.bureau}**（${chart.meta.gender}）。\n` +
                     `命理上代表你天生自帶高度的環境適應彈性與共情力，善於順應外在人事、隨方就圓；在推演上借對宮遷移宮之 **[${borrowedStars}]** 照入，意味著你的個人氣場與性格厚度深受外在歷練、遠方機遇與社交互動的雕琢，外在舞台有多大，你的內在潛能就有多廣。`;
     } else {
       actualMingStar = mingP.majorStars[0];
-      palaceIntro = `你的命盤核心坐落於 **${mingP.stem}${mingP.branch}宮**，由主星 **[${mingP.majorStars.join("、")}]** 坐守，五行局屬於 **${chart.meta.bureau}**（${chart.meta.gender}）。`;
+      palaceIntro = `你的命盤核心由主星 **[${mingP.majorStars.join("、")}]** 坐守，五行局屬於 **${chart.meta.bureau}**（${chart.meta.gender}）。`;
     }
 
     const kActualMing = STAR_KNOWLEDGE[actualMingStar] || STAR_KNOWLEDGE["天機"];
@@ -1929,11 +1929,11 @@ ${traitMinorText}
     if (isGuanLuEmpty) {
       const borrowedStars = fuQiP.majorStars.length > 0 ? fuQiP.majorStars.join("、") : "無主要曜星";
       actualGuanStar = fuQiP.majorStars[0] || mingPrimary;
-      palaceIntro = `事業宮（官祿宮）無主星坐守（呈「空宮」結構）。\n` +
+      palaceIntro = `您的事業宮（官祿宮）無主星坐守（呈「空宮」結構）。\n` +
                     `命理上代表你對職涯賽道沒有狹隘的既定框架，具備極強的跨界學習與動態轉型彈性；在推演上借對宮夫妻宮之 **[${borrowedStars}]** 照入，意味著你的事業發展與生活情感狀態、重要合作夥伴有著深層的聯動關係，和諧穩定的後盾是你在職場上大展身手的關鍵基石。`;
     } else {
       actualGuanStar = guanLuP.majorStars[0];
-      palaceIntro = `事業宮（官祿宮）由主星 **[${guanLuP.majorStars.join("、")}]** 坐鎮。`;
+      palaceIntro = `您的事業宮（官祿宮）由主星 **[${guanLuP.majorStars.join("、")}]** 坐鎮。`;
     }
 
     const kActualGuan = STAR_KNOWLEDGE[actualGuanStar] || kMing;
@@ -2006,24 +2006,24 @@ ${traitMinorText}
     }
 
     return `
-### 事業定位與職場競爭力
-${palaceIntro}
-- **核心工作作風**：${guanLuWorkStyle}
-- **命盤格局聯動**：${mingGuanSynergy}
-- **下半場重心推演**：${shenInsight}
+### 事業定位與職場競爭力 (測試版)
+(palaceIntro)${palaceIntro}
+- **核心工作作風**(workStyle)：${guanLuWorkStyle}
+- **命盤格局聯動**(trait)：${mingGuanSynergy}
+- **下半場重心推演**(shenInsight)：${shenInsight}
 
 #### 雙軌職涯適配賽道
 針對你的整體星曜格局，提供兩條高度適配的發展方向：
 1. **組織體制內的專業晉升（企業／機構路徑）**：
-   - **適配職能角色**：**${kActualGuan.employeeJobs}**
-   - **職場競爭優勢**：${guanLuAdvantage}
+   - **適配職能角色**(employeeJobs)：**${kActualGuan.employeeJobs}**
+   - **職場競爭優勢**(guanLuAdvantage)：${guanLuAdvantage}
 2. **自由工作者／個人品牌（獨立商業模式）**：
-   - **適配創業賽道**：**${kActualGuan.freelanceJobs}**
-   - **價值變現途徑**：發揮你在【${caiBoP.majorStars.join("、") || "財帛宮"}】所主導的進財思維，把專業技術或獨特經驗產品化，建立個人的專屬市場利基。
+   - **適配創業賽道**(freelanceJobs)：**${kActualGuan.freelanceJobs}**
+   - **價值變現途徑**(財帛宮主星)：發揮你在【${caiBoP.majorStars.join("、") || "財帛宮"}】所主導的進財思維，把專業技術或獨特經驗產品化，建立個人的專屬市場利基。
 
 #### 職場實質能量配置與避坑指南
-${sihuaCareerNote}
-- **宮位星曜配置特徵**：
+(sihuaCareerNote)${sihuaCareerNote}
+- **宮位星曜配置特徵**(starEffectText)：
 ${starEffectText}
 
 > **事業晉升關鍵**：清楚自己的發力支點，不盲目追求主流標準。在對的賽道深耕天賦長板，搭配適當的溝通與防禦策略，自然能建立堅固的職場護城河。
