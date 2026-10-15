@@ -1071,7 +1071,6 @@ function renderChart(chart) {
     card.style.gridColumn = pos.col;
     card.style.gridRow = pos.row;
     card.id = `palace-${p.branchIndex}`;
-    <!-- card.onclick = () => inspectPalace(p.branchIndex); -->
 	card.onclick = () => inspectPalace(p.branchIndex, true);
 
     const starsDiv = document.createElement("div");
@@ -1134,11 +1133,13 @@ function renderChart(chart) {
     grid.appendChild(card);
   });
 
-  inspectPalace(chart.posMing);
+  // 先縮放命盤、再定位命宮
   autoScaleChart();
+  inspectPalace(chart.posMing);
+  
 }
 
-function inspectPalace(targetBranchIdx) {
+function inspectPalace(targetBranchIdx, isUserClick = false) {
   if (!currentChartData) return;
   document.querySelectorAll(".palace-card").forEach(c => {
     c.classList.remove("active-selected", "highlight-opposite", "highlight-trine");
