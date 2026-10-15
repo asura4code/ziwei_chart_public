@@ -75,7 +75,7 @@
       display: flex;
       flex-direction: column;
       gap: 4px;
-	  min-width: 0; /* 👉 新增這行：防止 Grid 欄位被內部元件撐爆超出容器 */
+      min-width: 0; /* 防止 Grid 欄位被內部元件撐爆超出容器 */
     }
 
     .form-group label {
@@ -83,96 +83,18 @@
       color: var(--text-muted);
       font-weight: 500;
     }
-	
-	/* 1. 【一鍵排盤 / 其他按鈕】完全保持原樣，不設定固定高度 */
-	button {
-	  background: #fcfbfa;
-	  border: 1px solid var(--border-color);
-	  color: var(--text-main);
-	  padding: 8px 10px;        /* 維持原本的內距 */
-	  border-radius: 6px;
-	  font-size: 0.92rem;
-	  outline: none;
-	  width: 100%;
-	  box-sizing: border-box;
-	}
-
-	/* 確保 .btn-primary 與 .btn-secondary 維持原本設定，不要加 height 或 flex 置中 */
-	.btn-primary {
-	  background: var(--accent-brown);
-	  border-color: var(--accent-brown);
-	  color: #fff;
-	  font-weight: 600;
-	  cursor: pointer;
-	  transition: opacity 0.2s;
-	}
-
-	/* 2. 【僅針對所有輸入框與下拉選單】鎖定 42px 統一高度 */
-	input, select {
-	  background: #fcfbfa;
-	  border: 1px solid var(--border-color);
-	  color: var(--text-main);
-	  border-radius: 6px;
-	  font-size: 0.92rem;
-	  outline: none;
-	  width: 100%;
-	  min-width: 0;
-	  box-sizing: border-box;
-
-	  /* 統一高度設定 */
-	  height: 42px;
-	  padding: 0 10px;
-	  line-height: normal;
-	}
-
-	/* 3. 修正 iOS Safari 下拉選單垂直對齊 */
-	select {
-	  height: 42px;
-	  line-height: 42px;
-	  -webkit-appearance: menulist; /* 保留原生下拉小箭頭 */
-	}
-
-	/* 4. 修正 iOS Safari 文字框與日期框高度與文字置中 */
-	input[type="date"],
-	input[type="text"],
-	input[type="email"],
-	input[type="number"] {
-	  height: 42px;
-	  line-height: 42px;
-	  padding: 0 10px;
-	  -webkit-appearance: none;    /* 移除 iOS 額外自帶圓角陰影 */
-	}
-
-	/* 針對 iOS 原生日期選單內容文字的垂直置中修正 */
-	input[type="date"]::-webkit-date-and-time-value {
-	  height: 42px;
-	  line-height: 42px;
-	  margin: 0;
-	  padding: 0;
-	}
-
-    <!-- input, select, button { -->
-      <!-- background: #fcfbfa; -->
-      <!-- border: 1px solid var(--border-color); -->
-      <!-- color: var(--text-main); -->
-      <!-- padding: 8px 10px; -->
-      <!-- border-radius: 6px; -->
-      <!-- font-size: 0.92rem; -->
-      <!-- outline: none; -->
-      <!-- width: 100%; -->
-	  <!-- min-width: 0;       /* 👉 新增：避免原生寬度溢出 */ -->
-    <!-- } -->
-	
-	<!-- /* 新增以下專門針對日期輸入框的樣式微調 */ -->
-	<!-- input[type="date"] { -->
-	  <!-- padding: 8px 6px;  /* 縮小左右內距 */ -->
-	  <!-- font-size: 0.86rem; /* 稍微縮小字體，確保 10 個中英文字元能完全容納 */ -->
-	  <!-- -webkit-appearance: none; /* 移除 iOS 預設的額外陰影與凸出外框 */ -->
-	<!-- } -->
-
-    input:focus, select:focus {
-      border-color: var(--accent-brown);
-      background: #fff;
+    
+    /* 1. 【一鍵排盤 / 其他按鈕】完全保持原樣，不設定固定高度 */
+    button {
+      background: #fcfbfa;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 0.92rem;
+      outline: none;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .btn-primary {
@@ -182,6 +104,52 @@
       font-weight: 600;
       cursor: pointer;
       transition: opacity 0.2s;
+    }
+
+    /* 2. 【僅針對所有輸入框與下拉選單】鎖定 42px 統一高度 */
+    input, select {
+      background: #fcfbfa;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      border-radius: 6px;
+      font-size: 0.92rem;
+      outline: none;
+      width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+      height: 42px;
+      padding: 0 10px;
+      line-height: normal;
+    }
+
+    /* 3. 修正 iOS Safari 下拉選單垂直對齊 */
+    select {
+      height: 42px;
+      line-height: 42px;
+      -webkit-appearance: menulist;
+    }
+
+    /* 4. 修正 iOS Safari 文字框與日期框高度與文字置中 */
+    input[type="date"],
+    input[type="text"],
+    input[type="email"],
+    input[type="number"] {
+      height: 42px;
+      line-height: 42px;
+      padding: 0 10px;
+      -webkit-appearance: none;
+    }
+
+    input[type="date"]::-webkit-date-and-time-value {
+      height: 42px;
+      line-height: 42px;
+      margin: 0;
+      padding: 0;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--accent-brown);
+      background: #fff;
     }
 
     .btn-primary:hover {
@@ -252,7 +220,7 @@
       box-shadow: 0 6px 20px rgba(74, 59, 50, 0.1);
     }
 
-    /* 十二宮位卡片 (字體放大 3pt) */
+    /* 十二宮位卡片 */
     .palace-card {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
@@ -297,9 +265,8 @@
       align-content: flex-start;
     }
 
-    /* 放大約 3pt 的星曜與文字 */
     .star-badge {
-      font-size: 1.02rem; /* 原 0.8rem 放大約 3pt */
+      font-size: 1.02rem;
       font-weight: 700;
       display: inline-flex;
       align-items: center;
@@ -317,23 +284,23 @@
     .star-minor-good {
       color: var(--accent-green);
       background: rgba(59, 122, 87, 0.1);
-      font-size: 0.95rem; /* 放大 3pt */
+      font-size: 0.95rem;
     }
 
     .star-minor-bad {
       color: #b83b3b;
       background: rgba(184, 59, 59, 0.1);
-      font-size: 0.95rem; /* 放大 3pt */
+      font-size: 0.95rem;
     }
 
     .star-brightness {
-      font-size: 0.8rem; /* 放大 3pt */
+      font-size: 0.8rem;
       opacity: 0.85;
       font-weight: 500;
     }
 
     .sihua-tag {
-      font-size: 0.8rem; /* 放大 3pt */
+      font-size: 0.8rem;
       padding: 0 4px;
       border-radius: 3px;
       margin-left: 2px;
@@ -353,13 +320,7 @@
       padding-top: 5px;
     }
 
-    <!-- .limits-info { -->
-      <!-- font-size: 0.85rem; /* 放大 3pt (原 0.68rem) */ -->
-      <!-- color: var(--text-muted); -->
-      <!-- line-height: 1.3; -->
-      <!-- font-weight: 500; -->
-    <!-- } -->
-	.limits-info {
+    .limits-info {
       font-size: 0.82rem;
       color: var(--text-muted);
       line-height: 1.25;
@@ -370,23 +331,23 @@
 
     .palace-name-group {
       text-align: right;
-	  flex-shrink: 0;
+      flex-shrink: 0;
     }
 
     .palace-name {
-      font-size: 1.12rem; /* 放大 3pt (原 0.92rem) */
+      font-size: 1.12rem;
       font-weight: bold;
       color: var(--accent-brown);
     }
 
     .palace-body-mark {
-      font-size: 0.85rem; /* 放大 3pt */
+      font-size: 0.85rem;
       color: #b83b3b;
       margin-left: 2px;
     }
 
     .palace-stem-branch {
-      font-size: 0.95rem; /* 放大 3pt (原 0.76rem) */
+      font-size: 0.95rem;
       color: var(--accent-terracotta);
       font-weight: 600;
     }
@@ -465,6 +426,7 @@
       border-radius: 12px;
       padding: 20px;
       box-shadow: 0 4px 16px rgba(74, 59, 50, 0.06);
+	  scroll-margin-top: 12px; /* 捲動對齊時保留 12px 頂部間距 */
     }
 
     .ai-header {
@@ -483,19 +445,19 @@
       color: var(--accent-brown);
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
       gap: 6px;
       font-weight: 700;
     }
 
-    .ai-config-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 10px;
-      margin-bottom: 14px;
-      background: #f7f3ee;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid var(--border-color);
+    /* 動態宮位檢視標籤樣式 */
+    .palace-view-badge {
+      font-size: 0.98rem;
+      color: var(--accent-terracotta);
+      font-weight: 700;
+      background: rgba(184, 107, 79, 0.1);
+      padding: 2px 8px;
+      border-radius: 6px;
     }
 
     .ai-output-box {
@@ -517,26 +479,6 @@
       font-style: italic;
     }
 
-    /* Markdown 樣式 */
-    /* .ai-markdown h3 {
-      color: var(--accent-brown);
-      margin: 14px 0 6px 0;
-      font-size: 1.1rem;
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 3px;
-					   
-    }
-    .ai-markdown h3:first-child { margin-top: 0; }
-    .ai-markdown p { margin-bottom: 8px; }
-    .ai-markdown strong { color: var(--accent-terracotta); font-weight: 600; }
-    .ai-markdown ul { margin-left: 18px; margin-bottom: 10px; }
-    .ai-markdown li { margin-bottom: 3px; }
-    .ai-markdown blockquote {
-      border-left: 3px solid var(--accent-blue);
-      padding-left: 10px;
-      color: var(--text-muted);
-      margin: 10px 0;
-    } */
     /* Markdown 排版與階層優化 */
     .ai-markdown h3 {
       color: var(--accent-brown);
@@ -611,8 +553,8 @@
       0%, 100% { opacity: 0; }
       50% { opacity: 1; }
     }
-	
-	/* 排盤完成提醒橫幅 */
+    
+    /* 排盤完成提醒橫幅 */
     .chart-ready-notice {
       background: linear-gradient(135deg, #fffaf5 0%, #fdf4ed 100%);
       border: 1.5px solid var(--accent-terracotta);
@@ -638,13 +580,13 @@
       from { opacity: 0; transform: translateY(-6px); }
       to { opacity: 1; transform: translateY(0); }
     }
-	
-	/* 僅在手機直立螢幕（雙欄排版）時生效，不影響電腦版 */
-	@media (max-width: 600px) {
-	  .control-panel .btn-primary {
-		grid-column: 2; /* 指定跳到第 2 欄（右邊），對齊上方的性別欄位 */
-	  }
-	}
+    
+    /* 僅在手機直立螢幕（雙欄排版）時生效，不影響電腦版 */
+    @media (max-width: 600px) {
+      .control-panel .btn-primary {
+        grid-column: 2;
+      }
+    }
   </style>
 </head>
 <body>
@@ -658,16 +600,16 @@
   <!-- 參數配置列 -->
   <div class="control-panel">
   
-	<div class="form-group">
-	  <label>暱稱</label>
-	  <input type="text" id="userName" placeholder="請輸入姓名或稱呼" />
-	</div>
+    <div class="form-group">
+      <label>暱稱</label>
+      <input type="text" id="userName" placeholder="請輸入姓名或稱呼" />
+    </div>
 
-	<div class="form-group">
-	  <label>Email</label>
-	  <input type="email" id="userEmail" placeholder="example@gmail.com" />
-	</div>
-	
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="userEmail" placeholder="example@gmail.com" />
+    </div>
+    
     <div class="form-group">
       <label>曆法輸入模式</label>
       <select id="calendarMode" onchange="toggleCalendarMode()">
@@ -678,9 +620,7 @@
 
     <div class="form-group" id="solarDateGroup">
       <label>西曆出生年月日</label>
-      <!-- <input type="date" id="solarDate" /> -->
-	  <!-- 改為 text，並加上 readonly 避免彈出手機虛擬英文鍵盤 -->
-	  <input type="text" id="solarDate" readonly placeholder="點擊選擇日期" style="cursor: pointer;" />
+      <input type="text" id="solarDate" readonly placeholder="點擊選擇日期" style="cursor: pointer;" />
     </div>
 
     <div class="form-group" id="lunarYearGroup" style="display:none;">
@@ -737,20 +677,10 @@
       </select>
     </div>
 
-    <!-- <div class="form-group"> -->
-      <!-- <label>庚干四化設定</label> -->
-      <!-- <select id="gengMode"> -->
-        <!-- <option value="tong_ji">陽武府同 (天同忌)</option> -->
-        <!-- <option value="yin_ji">陽武同陰 (太陰忌)</option> -->
-      <!-- </select> -->
-    <!-- </div> -->
-
-    <!-- <button class="btn-primary" onclick="generateChart()">一鍵排盤</button> -->
-	<button class="btn-primary" onclick="generateChart(true)">一鍵排盤</button>
-    <!-- <button class="btn-secondary" onclick="exportJSON()">匯出 JSON</button> -->
+    <button class="btn-primary" onclick="generateChart(true)">一鍵排盤</button>
   </div>
   
-  <!-- 👉 在此處插入提醒容器 -->
+  <!-- 排盤完成提醒容器 -->
   <div id="chartReadyNotice" class="chart-ready-notice" style="display: none;"></div>
 
   <!-- 天盤自適應縮放外框 -->
@@ -779,7 +709,7 @@
           </div>
 
           <div class="actions-bar" style="margin-top:4px;">
-            <span style="font-size:0.78rem; color:var(--text-muted);">提示：點擊任一宮位可聯動高亮三方四正。</span>
+            <span style="font-size:0.78rem; color:var(--text-muted);">提示：點擊任一宮位即可聯動點亮三方四正並切換下方專屬命理解析。</span>
           </div>
         </div>
       </div>
@@ -789,8 +719,10 @@
   <!-- AI 命盤智能命理解析面板 -->
   <div class="ai-section">
     <div class="ai-header">
-      <h2><span>✦</span> AI 智能命理解析</h2>
-      <!-- 僅保留複製按鈕，但套用原本 btn-ai 的精美漸層樣式 -->
+      <h2>
+        <span>✦</span> AI 智能命理解析
+        <span id="currentPalaceBadge" class="palace-view-badge">【當前檢視：命宮&十年大運】</span>
+      </h2>
       <div>
         <button class="btn-ai" onclick="copyAnalysisText()" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 16px;">
           <span>📋</span>
@@ -799,24 +731,17 @@
       </div>
     </div>
 
-    <!-- 移除了原本的 .ai-config-grid 配置區塊 -->
-
     <!-- AI 解析文字渲染區塊 -->
     <div class="ai-output-box" id="aiOutputBox">
-      排盤後將自動為您推演五大核心論命主題報告...
+      排盤後將自動為您推演命宮與十年大運報告，點選命盤任一宮位可即時切換解析...
     </div>
   </div>
 </div>
 
 <script>
-
-const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwie9M98yE6QgfaLq5u7cYVL_oCKdWv48sJfLqkZVj6kGllqiHpRuwxJECApGdMT1E38w/exec"; // Google Apps Script 部署網址
+const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwie9M98yE6QgfaLq5u7cYVL_oCKdWv48sJfLqkZVj6kGllqiHpRuwxJECApGdMT1E38w/exec";
 
 async function logChartRecord(chart, mode) {
-  // 印出目前程式碼實際抓到的網址，方便在 Console 檢查
-  <!-- console.log("目前程式抓到的 Web App 網址為：", GAS_WEBAPP_URL); -->
-
-  // 簡化防呆：只要有填入 http 開頭的網址就允許執行
   if (!GAS_WEBAPP_URL || !GAS_WEBAPP_URL.startsWith("https://")) {
     console.warn("尚未設定有效的 Google Apps Script 網址（網址必須為 https:// 開頭）");
     return;
@@ -826,14 +751,13 @@ async function logChartRecord(chart, mode) {
   const mingStars = (mingPalace.majorStars.length > 0) 
     ? mingPalace.majorStars.join("、") 
     : "命無主星";
-	
-  // 1. 取得新欄位的值
+    
   const userName = document.getElementById("userName") ? document.getElementById("userName").value.trim() : "";
   const userEmail = document.getElementById("userEmail") ? document.getElementById("userEmail").value.trim() : "";
 
   const payload = {
-	userName: userName,       // 新增
-    userEmail: userEmail,     // 新增
+    userName: userName,
+    userEmail: userEmail,
     calendarMode: mode === "solar" ? "西曆 (國曆)" : "農曆",
     solarDate: mode === "solar" ? document.getElementById("solarDate").value : "",
     lunarDate: `農曆 ${chart.meta.yearStem}${chart.meta.yearBranch}年 ${chart.meta.month}月 ${chart.meta.day}日`,
@@ -841,8 +765,7 @@ async function logChartRecord(chart, mode) {
     gender: chart.meta.gender,
     bazi: `${chart.meta.yearStem}${chart.meta.yearBranch}年 / ${chart.meta.month}月 / ${chart.meta.day}日 / ${chart.meta.hourBranch}時`,
     bureau: chart.meta.bureau,
-    mingMajorStars: mingStars,
-    <!-- gengMode: document.getElementById("gengMode").value === "tong_ji" ? "天同忌" : "太陰忌" -->
+    mingMajorStars: mingStars
   };
 
   try {
@@ -1108,8 +1031,8 @@ function calculateZiWeiChart(params) {
     meta: {
       gender: gender === "M" ? (isYangYear ? "陽男" : "陰男") : (isYangYear ? "陽女" : "陰女"),
       bureau: bureauName,
-	  bureauNum: bureauNum,
-      isClockwiseLimit: isClockwiseLimit,								 
+      bureauNum: bureauNum,
+      isClockwiseLimit: isClockwiseLimit,
       lifeLord: lifeLords[posMing],
       bodyLord: bodyLords[yearBranchIdx],
       sihua: sihua,
@@ -1148,7 +1071,8 @@ function renderChart(chart) {
     card.style.gridColumn = pos.col;
     card.style.gridRow = pos.row;
     card.id = `palace-${p.branchIndex}`;
-    card.onclick = () => inspectPalace(p.branchIndex);
+    <!-- card.onclick = () => inspectPalace(p.branchIndex); -->
+	card.onclick = () => inspectPalace(p.branchIndex, true);
 
     const starsDiv = document.createElement("div");
     starsDiv.className = "stars-container";
@@ -1183,27 +1107,16 @@ function renderChart(chart) {
     const footerDiv = document.createElement("div");
     footerDiv.className = "palace-footer";
 
-    <!-- const limitsDiv = document.createElement("div"); -->
-    <!-- limitsDiv.className = "limits-info"; -->
-    <!-- <!-- limitsDiv.innerHTML = ` --> -->
-      <!-- <!-- <div>十年大運 ${p.decadalRange}</div> --> -->
-      <!-- <!-- <div style="font-size:0.78rem; opacity:0.85;">小限 ${p.yearlyAges.slice(0, 2).join(",") || "-"}</div> --> -->
-    <!-- <!-- `; --> -->
-	<!-- limitsDiv.innerHTML = ` -->
-      <!-- <div>十年大運 ${p.decadalRange}</div> -->
-      <!-- <div style="font-size:0.7rem; opacity:0.85; line-height:1.2; margin-top:2px; word-break:break-all;">小限 ${p.yearlyAges.join(",") || "-"}</div> -->
-    <!-- `; -->
-	
-	const xiaoXianHtml = p.yearlyAges.length > 0
-	  ? p.yearlyAges.map((age, idx) => `<span style="white-space:nowrap;">${age}${idx < p.yearlyAges.length - 1 ? ',' : ''}</span>`).join("<wbr>")
-	  : "-";
+    const xiaoXianHtml = p.yearlyAges.length > 0
+      ? p.yearlyAges.map((age, idx) => `<span style="white-space:nowrap;">${age}${idx < p.yearlyAges.length - 1 ? ',' : ''}</span>`).join("<wbr>")
+      : "-";
 
-	const limitsDiv = document.createElement("div");
-	limitsDiv.className = "limits-info";
-	limitsDiv.innerHTML = `
-	  <div>十年大運 ${p.decadalRange}</div>
-	  <div style="font-size:0.7rem; opacity:0.85; line-height:1.2; margin-top:2px; word-break:normal;">小限 ${xiaoXianHtml}</div>
-	`;
+    const limitsDiv = document.createElement("div");
+    limitsDiv.className = "limits-info";
+    limitsDiv.innerHTML = `
+      <div>十年大運 ${p.decadalRange}</div>
+      <div style="font-size:0.7rem; opacity:0.85; line-height:1.2; margin-top:2px; word-break:normal;">小限 ${xiaoXianHtml}</div>
+    `;
 
     const nameGroup = document.createElement("div");
     nameGroup.className = "palace-name-group";
@@ -1261,8 +1174,21 @@ function inspectPalace(targetBranchIdx) {
     <div><span style="color:var(--accent-terracotta);">三合二 (${pTrine2.name})：</span>${formatStars(pTrine2)}</div>
   `;
 
-  // 點擊宮位（或初始排盤定位命宮）時，同步切換下方 AI 解析內容
+  // 點擊宮位（或初始排盤預設選中命宮）時，同步更新動態標籤與下方 AI 解析內容
   renderPalaceAnalysis(pCurrent.name);
+  
+  // 僅在「使用者手動點擊」且為「手機／平板尺寸（寬度 <= 768px）」時平滑捲動
+  <!-- if (isUserClick && window.innerWidth <= 768) { -->
+    <!-- const aiSectionEl = document.querySelector(".ai-section"); -->
+    <!-- if (aiSectionEl) { -->
+      <!-- aiSectionEl.scrollIntoView({ behavior: "smooth", block: "start" }); -->
+    <!-- } -->
+  <!-- } -->
+  if (isUserClick && window.innerWidth <= 768) {
+  setTimeout(() => {
+    document.querySelector(".ai-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 250);
+}
 }
 
 function generateChart(isManual = false) {
@@ -1293,7 +1219,7 @@ function generateChart(isManual = false) {
   }
 
   const chart = calculateZiWeiChart({ yearStemIdx, yearBranchIdx, month, day, hourBranchIdx, gender, gengMode });
-  renderChart(chart); // 內部會呼叫 inspectPalace(chart.posMing)，預設顯示「命宮＋十年大運」
+  renderChart(chart); // 內部會呼叫 inspectPalace(chart.posMing)，預設顯示「命宮&十年大運」
   
   if (isManual) {
     const rawName = document.getElementById("userName") ? document.getElementById("userName").value.trim() : "";
@@ -1301,7 +1227,7 @@ function generateChart(isManual = false) {
     
     const noticeEl = document.getElementById("chartReadyNotice");
     if (noticeEl) {
-      noticeEl.innerHTML = `✨ 親愛的 <span class="highlight-name">${displayName}</span>，您的專屬命盤已排定完成！點選命盤中任一宮位即可切換下方專屬解析，建議可先<strong>截圖保存</strong>命盤喔！📸`;
+      noticeEl.innerHTML = `✨ 親愛的 <span class="highlight-name">${displayName}</span>，您的專屬命盤已排定完成！點選命盤中任一宮位即可切換下方專屬解析，建議可先<strong>截圖儲存</strong>命盤喔！📸`;
       noticeEl.style.display = "block";
     }
     logChartRecord(chart, mode);
@@ -1855,7 +1781,8 @@ function analyzePalaceMinorShaSihua(chart, palace, actualStar) {
 }
 
 /**
- * 本機紫微推理引擎：全 12 宮位 ＋ 十年大運集大成推演（已移除大寫數字編號）
+ * 本機紫微推理引擎：全 12 宮位 ＋ 十年大運集大成推演
+ * （僅保留【命宮】與【十年大運】標題括號，其餘 11 宮位僅顯示純主題副標）
  */
 function runLocalInference(chart, topic) {
   const getPalace = (name) => chart.palaces.find(p => p.name === name) || chart.palaces[0];
@@ -1914,7 +1841,7 @@ function runLocalInference(chart, topic) {
   const keInfo = sihuaPalaces["科"] || { star: "主星", palace: "交會", branch: "" };
   const jiInfo = sihuaPalaces["忌"] || { star: "主星", palace: "磨練宮", branch: "" };
 
-  // 1. 【命宮】個人特質與底層思維解析
+  // 1. 【命宮】個人特質與底層思維解析（保留【命宮】）
   if (topic === "overview") {
     const isMingEmpty = mingP.majorStars.length === 0;
     let palaceIntro = "";
@@ -1986,7 +1913,7 @@ ${effectText}
     `.trim();
   }
 
-  // 2. 【兄弟宮】手足同儕、合夥盟友與私人金庫解析
+  // 2. 兄弟宮：手足同儕、合夥盟友與私人金庫解析
   if (topic === "siblings") {
     const isEmpty = xiongDiP.majorStars.length === 0;
     const borrowed = jiaoYouP.majorStars.join("、") || "無主星";
@@ -2003,7 +1930,7 @@ ${effectText}
     const { effectText, sihuaNote } = analyzePalaceMinorShaSihua(chart, xiongDiP, xiongDiPrimary);
 
     return `
-### 【兄弟宮】手足同儕、合夥盟友與私人金庫解析
+### 手足同儕、合夥盟友與私人金庫解析
 ${palaceIntro}
 - **手足與核心盟友互動基調**：${kXiongDi.siblingMode}
 - **現金小財庫診斷（財帛之田宅連動）**：${cashVaultCheck}
@@ -2017,7 +1944,7 @@ ${effectText}
     `.trim();
   }
 
-  // 3. 【夫妻宮】親密關係與伴侶特質解析
+  // 3. 夫妻宮：親密關係與伴侶特質解析
   if (topic === "marriage") {
     const isFuQiEmpty = fuQiP.majorStars.length === 0;
     let palaceIntro = "";
@@ -2046,7 +1973,7 @@ ${effectText}
     const { effectText, sihuaNote } = analyzePalaceMinorShaSihua(chart, fuQiP, fuQiPrimaryStar);
 
     return `
-### 【夫妻宮】親密關係與伴侶特質解析
+### 親密關係與伴侶特質解析
 ${palaceIntro}
 - **理想伴侶特質**：${kFuActual.love}。
 - **核心相處互動風格**：${fuQiLoveDynamic}
@@ -2060,7 +1987,7 @@ ${effectText}
     `.trim();
   }
 
-  // 4. 【子女宮】才華孵化、投資合夥與晚輩傳承解析
+  // 4. 子女宮：才華孵化、投資合夥與晚輩傳承解析
   if (topic === "children") {
     const isEmpty = ziNvP.majorStars.length === 0;
     const borrowed = tianZhaiP.majorStars.join("、") || "無主星";
@@ -2074,7 +2001,7 @@ ${effectText}
     const { effectText, sihuaNote } = analyzePalaceMinorShaSihua(chart, ziNvP, ziNvPrimary);
 
     return `
-### 【子女宮】才華孵化、投資合夥與晚輩傳承解析
+### 才華孵化、投資合夥與晚輩傳承解析
 ${palaceIntro}
 - **晚輩教養與門生培育風格**：${kZiNv.childrenMode}
 - **事業合夥與專案孵化（官祿之交友連動）**：${partnerInsight}
@@ -2088,7 +2015,7 @@ ${effectText}
     `.trim();
   }
 
-  // 5. 【財帛宮】財富引擎與個人資產配置
+  // 5. 財帛宮：財富引擎與個人資產配置
   if (topic === "wealth") {
     const isCaiBoEmpty = caiBoP.majorStars.length === 0;
     let palaceIntro = "";
@@ -2122,7 +2049,7 @@ ${effectText}
     }
 
     return `
-### 【財帛宮】財富引擎與個人資產配置
+### 財富引擎與個人資產配置
 ${palaceIntro}
 - **核心進財思維**：${caiBoWorkStyle}
 - **財庫蓄水實力（財帛水龍頭 × 田宅大財庫 × 兄弟小財庫）**：${reservoirAnalysis}
@@ -2138,7 +2065,7 @@ ${sihuaNote ? `${sihuaNote}\n` : ""}${fireGreedyNote}${effectText}
     `.trim();
   }
 
-  // 6. 【疾厄宮】先天體質、身心能量與抗壓韌性解析
+  // 6. 疾厄宮：先天體質、身心能量與抗壓韌性解析
   if (topic === "health") {
     const isEmpty = jiEP.majorStars.length === 0;
     const borrowed = fuMuP.majorStars.join("、") || "無主星";
@@ -2152,7 +2079,7 @@ ${sihuaNote ? `${sihuaNote}\n` : ""}${fireGreedyNote}${effectText}
     const { effectText, sihuaNote } = analyzePalaceMinorShaSihua(chart, jiEP, jiEPrimary);
 
     return `
-### 【疾厄宮】先天體質、身心能量與抗壓韌性解析
+### 先天體質、身心能量與抗壓韌性解析
 ${palaceIntro}
 - **重點關照生理系統**：**${kJiE.healthElement}**
 - **日常養生與保養建議**：${kJiE.healthAdvice}
@@ -2166,7 +2093,7 @@ ${effectText}
     `.trim();
   }
 
-  // 7. 【遷移宮】外在人設、跨界機遇與舞台拓展解析
+  // 7. 遷移宮：外在人設、跨界機遇與舞台拓展解析
   if (topic === "travel") {
     const isEmpty = qianYiP.majorStars.length === 0;
     const borrowed = mingP.majorStars.join("、") || "無主星";
@@ -2180,7 +2107,7 @@ ${effectText}
     const { effectText, sihuaNote } = analyzePalaceMinorShaSihua(chart, qianYiP, qianYiPrimary);
 
     return `
-### 【遷移宮】外在人設、跨界機遇與舞台拓展解析
+### 外在人設、跨界機遇與舞台拓展解析
 ${palaceIntro}
 - **第一印象與外在社交氣場**：展現「${kQianYi.trait}」的公眾魅力。
 - **異地發展與跨界破圈潛力**：${stageInsight}
@@ -2194,7 +2121,7 @@ ${effectText}
     `.trim();
   }
 
-  // 8. 【交友宮】人脈圈層、團隊管理與貴人小人辨識
+  // 8. 交友宮：人脈圈層、團隊管理與貴人小人辨識
   if (topic === "friends") {
     const isEmpty = jiaoYouP.majorStars.length === 0;
     const borrowed = xiongDiP.majorStars.join("、") || "無主星";
@@ -2210,7 +2137,7 @@ ${effectText}
     const { effectText, sihuaNote } = analyzePalaceMinorShaSihua(chart, jiaoYouP, jiaoYouPrimary);
 
     return `
-### 【交友宮】人脈圈層、團隊管理與貴人小人辨識
+### 人脈圈層、團隊管理與貴人小人辨識
 ${palaceIntro}
 - **人脈圈層與團隊管理風格**：${crowdInsight}
 - **人際邊界與助力診斷（兄友成就線連動）**：${boundaryCheck}
@@ -2223,7 +2150,7 @@ ${effectText}
     `.trim();
   }
 
-  // 9. 【官祿宮】事業定位與職場競爭力
+  // 9. 官祿宮：事業定位與職場競爭力
   if (topic === "career") {
     const isGuanLuEmpty = guanLuP.majorStars.length === 0;
     let palaceIntro = "";
@@ -2253,7 +2180,7 @@ ${effectText}
     const fallbackSihua = sihuaNote || `✦ **生年四化支撐**：生年「化權」落在 **【${quanInfo.palace}】(${quanInfo.star})**，這是你爭取職場話語權與主控權的核心支點；善用該領域的優勢，能為你的事業推展帶來關鍵助力。`;
 
     return `
-### 【官祿宮】事業定位與職場競爭力
+### 事業定位與職場競爭力
 ${palaceIntro}
 - **核心工作作風**：${guanLuWorkStyle}
 - **命財官三合聯動**：${mingGuanSynergy}
@@ -2277,7 +2204,7 @@ ${effectText}
     `.trim();
   }
 
-  // 10. 【田宅宮】不動產運勢、家庭根基與財富蓄水池解析
+  // 10. 田宅宮：不動產運勢、家庭根基與財富蓄水池解析
   if (topic === "property") {
     const isEmpty = tianZhaiP.majorStars.length === 0;
     const borrowed = ziNvP.majorStars.join("、") || "無主星";
@@ -2291,7 +2218,7 @@ ${effectText}
     const { effectText, sihuaNote } = analyzePalaceMinorShaSihua(chart, tianZhaiP, tianZhaiPrimary);
 
     return `
-### 【田宅宮】不動產運勢、家庭根基與財富蓄水池解析
+### 不動產運勢、家庭根基與財富蓄水池解析
 ${palaceIntro}
 - **置產偏好與居住格局**：${kTZ.propertyTrait}
 - **財富終極蓄水池（財帛之疾厄 × 兄弟之氣數位）**：${wealthBodyInsight}
@@ -2305,7 +2232,7 @@ ${effectText}
     `.trim();
   }
 
-  // 11. 【福德宮】潛意識底色、情緒價值與心靈財富解析
+  // 11. 福德宮：潛意識底色、情緒價值與心靈財富解析
   if (topic === "fortune") {
     const isEmpty = fuDeP.majorStars.length === 0;
     const borrowed = caiBoP.majorStars.join("、") || "無主星";
@@ -2319,7 +2246,7 @@ ${effectText}
     const { effectText, sihuaNote } = analyzePalaceMinorShaSihua(chart, fuDeP, fuDePrimary);
 
     return `
-### 【福德宮】潛意識底色、情緒價值與心靈財富解析
+### 潛意識底色、情緒價值與心靈財富解析
 ${palaceIntro}
 - **深層精神需求與心靈底色**：${kFuDe.fudeMode}
 - **財福線連動（心態決定財態）**：${caifuLink}
@@ -2333,7 +2260,7 @@ ${effectText}
     `.trim();
   }
 
-  // 12. 【父母宮】長輩上司緣、體制資源與法規文書運解析
+  // 12. 父母宮：長輩上司緣、體制資源與法規文書運解析
   if (topic === "parents") {
     const isEmpty = fuMuP.majorStars.length === 0;
     const borrowed = jiEP.majorStars.join("、") || "無主星";
@@ -2347,7 +2274,7 @@ ${effectText}
     const { effectText, sihuaNote } = analyzePalaceMinorShaSihua(chart, fuMuP, fuMuPrimary);
 
     return `
-### 【父母宮】長輩上司緣、體制資源與法規文書運解析
+### 長輩上司緣、體制資源與法規文書運解析
 ${palaceIntro}
 - **長輩緣與向上管理模式（直屬上司互動）**：${kFuMu.parentsMode}
 - **父疾光明線（考運、文書契約與社會名聲）**：${lightLineInsight}
@@ -2361,7 +2288,7 @@ ${effectText}
     `.trim();
   }
 
-  // 13. 【十年大運】節奏與關鍵轉折分析（綁定於命宮下方顯示）
+  // 13. 【十年大運】節奏與關鍵轉折分析（保留【十年大運】，綁定於命宮下方顯示）
   if (topic === "decadal") {
     const STAGE_CONFIGS = [
       { name: "啟蒙奠基期", focus: "心智啟蒙、身心性格塑型與原生家庭環境適應" },
@@ -2506,7 +2433,7 @@ const PALACE_TOPIC_MAP = {
 
 let currentSelectedPalaceName = "命宮";
 
-// 點擊宮位時動態切換渲染對應的 AI 解析
+// 點擊宮位時動態更新標題標籤並切換渲染對應的 AI 解析
 function renderPalaceAnalysis(palaceName) {
   const outBox = document.getElementById("aiOutputBox");
   if (!currentChartData || !outBox) return;
@@ -2514,14 +2441,20 @@ function renderPalaceAnalysis(palaceName) {
   currentSelectedPalaceName = palaceName;
   const topicKey = PALACE_TOPIC_MAP[palaceName] || "overview";
 
+  // 1. 動態更新標題右側的【當前檢視：...】標籤
+  const badgeEl = document.getElementById("currentPalaceBadge");
+  if (badgeEl) {
+    const badgeLabel = palaceName === "命宮" ? "命宮&十年大運" : `${palaceName}宮`;
+    badgeEl.textContent = `【當前檢視：${badgeLabel}】`;
+  }
+
+  // 2. 產出對應宮位的 Markdown 解析內容
   let markdownOutput = "";
   if (palaceName === "命宮") {
-    // 命宮下方綁定十年大運解析
     const mingAnalysis = runLocalInference(currentChartData, "overview");
     const decadalAnalysis = runLocalInference(currentChartData, "decadal");
     markdownOutput = `${mingAnalysis}\n\n---\n\n${decadalAnalysis}`;
   } else {
-    // 其餘 11 宮位各自顯示專屬解析
     markdownOutput = runLocalInference(currentChartData, topicKey);
   }
 
@@ -2535,7 +2468,7 @@ function copyAnalysisText() {
     alert("尚未生成解析報告！");
     return;
   }
-  const label = currentSelectedPalaceName === "命宮" ? "命宮與十年大運" : `${currentSelectedPalaceName}宮`;
+  const label = currentSelectedPalaceName === "命宮" ? "命宮&十年大運" : `${currentSelectedPalaceName}宮`;
   navigator.clipboard.writeText(text).then(() => {
     alert(`【${label}】命理報告已成功複製至剪貼簿！`);
   });
@@ -2558,7 +2491,6 @@ function initDefaultDateTime() {
 window.onload = () => {
   initDefaultDateTime();
   
-  // 👉 初始化年月日三輪滑動滾輪
   new Rolldate({
     el: '#solarDate',
     format: 'YYYY-MM-DD',
@@ -2572,13 +2504,10 @@ window.onload = () => {
       month: '月',
       day: '日'
     },
-    confirm: function(date) {
-      // 選擇完畢後可自動重新排盤（選填）
-      // generateChart();
-    }
-  })
+    confirm: function(date) {}
+  });
   
-  generateChart(); // 會自動排出命盤並產出 5 大主題
+  generateChart(); // 自動排盤並預設顯示「命宮&十年大運」
 };
 </script>
 </body>
