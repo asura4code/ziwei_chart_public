@@ -1178,17 +1178,12 @@ function inspectPalace(targetBranchIdx) {
   renderPalaceAnalysis(pCurrent.name);
   
   // 僅在「使用者手動點擊」且為「手機／平板尺寸（寬度 <= 768px）」時平滑捲動
-  <!-- if (isUserClick && window.innerWidth <= 768) { -->
-    <!-- const aiSectionEl = document.querySelector(".ai-section"); -->
-    <!-- if (aiSectionEl) { -->
-      <!-- aiSectionEl.scrollIntoView({ behavior: "smooth", block: "start" }); -->
-    <!-- } -->
-  <!-- } -->
   if (isUserClick && window.innerWidth <= 768) {
-  setTimeout(() => {
-    document.querySelector(".ai-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, 250);
-}
+    const aiSectionEl = document.querySelector(".ai-section");
+    if (aiSectionEl) {
+      aiSectionEl.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
 }
 
 function generateChart(isManual = false) {
